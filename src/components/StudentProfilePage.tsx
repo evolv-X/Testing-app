@@ -50,8 +50,8 @@ const Name = styled.h2`
 
 const Badge = styled.span`
   padding: 4px 12px;
-  background: ${(p) => p.theme.colors.primary};
-  color: #fff;
+  background: #E8F5FF;
+  color: #4094F7;
   border-radius: ${(p) => p.theme.radius.md};
   font-size: 14px;
 `;
@@ -84,14 +84,15 @@ const Actions = styled.div`
 const Button = styled.button`
   padding: 10px 16px;
   border-radius: ${(p) => p.theme.radius.md};
-  border: 1px solid ${(p) => p.theme.colors.primary};
+  border: 1px solid #DDE2E4;
   background: transparent;
-  color: ${(p) => p.theme.colors.primary};
+  color: ${(p) => p.theme.colors.text};
   cursor: pointer;
 
   &:hover {
-    background: ${(p) => p.theme.colors.primary};
-    color: #fff;
+    background: #E8F5FF;
+    color: #4094F7;
+    border: 1px solid #4094F7;
   }
 `;
 
