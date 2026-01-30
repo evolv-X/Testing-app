@@ -1,56 +1,60 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
 import "../../index.css";
-import { QuestionElement } from "./components/QuestionElement";
+import styled from "@emotion/styled";
+import { TestCard } from "./components/TestCard";
+import type { Attempt, TestResult } from "../../types/testing";
 
+const Grid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+`;
 
 export function StudentTestPage() {
-  const [questions, setQuestions] = useState([]);
+  const [tests, setTests] = useState<TestResult[]>([]);
+  const [attempt, setAttempt] = useState<Attempt[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [error, setError] = useState();
 
-  console.log("вывести массив");
+  console.log(tests);
+  console.log(attempt);
 
   useEffect(() => {
-    const data = "/public/data/questions.json";
-    let isIgnore = false;
-    fetch(data)
-      .then((response) => {
-        if (!response.ok) throw new Error(`http: ${response.status}`);
-        return response.json();
-      })
-      .then((json) => {
-        if (isIgnore) return;
-        const questions = json.filter((q) => q.testId === testId);
-        setQuestions(questions);
-      })
-      .catch((e) => {
-        if (isIgnore) return;
-        setError(String(e.message));
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-    return () => {
-      isIgnore = false;
-    };
-  }, []);
+    const tests = "/public/data/tests.json";
+    const attempt = "/public/data/attempts.json";
+    Promise.all([fetch(tests), fetch(attempt)])
+      .then(async ([res1, res2]) => {
+        if (!res1.ok) throw new Error(`http: ${res1.status}`);
+        if (!res2.ok) throw new Error(`http: ${res2.status}`);
 
-  const params = useParams();
-  const testId = Number(params.id);
+        console.log(res2);
+
+        const t = await res1.json();
+        const a = await res2.json();
+
+        setTests(t);
+        setAttempt(a);
+        setLoading(false)
+        // return Promise.all([t, a]);
+      })
+      .catch((error) => {
+        console.log(error.message);
+        
+        setError(error.message);
+      });
+  }, []);
+  // if (true) return <h1>123</h1>;
+  if (error) return <div>{error}</div>;
+  if (loading) return <div className="custom-loader"></div>;
 
   return (
     <div>
-      <h2>Studentpage {params.id}</h2>
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. A, nemo.</p>
-      {error === "" ? <div></div> : <div>{error}</div>}
-      {loading && <div className="custom-loader"></div>}
-      <ul>
-        {questions.map((t) => (
-          <QuestionElement key={t.id} t={t}></QuestionElement>
-        ))}
-        {questions.length === 0 && <li>Нет тестов</li>}
-      </ul>
+      <Grid>
+        <div>
+          {tests.map((test) => (
+            <TestCard key={test.id} test={test} lastAttempt={attempt[0]}/>
+          ))}
+        </div>
+      </Grid>
     </div>
   );
 }

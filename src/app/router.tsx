@@ -20,8 +20,8 @@ export const router = createBrowserRouter([
         element: <StudentLayout />,
         children: [
           { index: true, element: <StudentPage /> },
-          { path: "tests", element: <StudentTest /> },
-          { path: "test/:id", element: <StudentTestPage /> },
+          { path: "tests", element: <StudentTestPage /> },
+          // { path: "test/:id", element: <StudentTestPage /> },
           { path: "statistics", element: <h2>statistics</h2> },
           { path: "profile", element: <StudentProfilePage/>},
         ],

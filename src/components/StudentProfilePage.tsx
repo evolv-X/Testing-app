@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import { useState } from "react";
 import ChangeModalPass from "./ChangeModalPass";
+import { Toast } from "./ui/Toast";
 
 type GroupLearning = { group: string; course: string; direction: string };
 
@@ -50,8 +51,8 @@ const Name = styled.h2`
 
 const Badge = styled.span`
   padding: 4px 12px;
-  background: #E8F5FF;
-  color: #4094F7;
+  background: #e8f5ff;
+  color: #4094f7;
   border-radius: ${(p) => p.theme.radius.md};
   font-size: 14px;
 `;
@@ -84,17 +85,20 @@ const Actions = styled.div`
 const Button = styled.button`
   padding: 10px 16px;
   border-radius: ${(p) => p.theme.radius.md};
-  border: 1px solid #DDE2E4;
+  border: 1px solid #dde2e4;
   background: transparent;
   color: ${(p) => p.theme.colors.text};
   cursor: pointer;
 
   &:hover {
-    background: #E8F5FF;
-    color: #4094F7;
-    border: 1px solid #4094F7;
+    background: #e8f5ff;
+    color: #4094f7;
+    border: 1px solid #4094f7;
   }
 `;
+
+const emptyAvatar =
+  "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.pinimg.com%2Foriginals%2Fac%2F3b%2F7c%2Fac3b7cd63b5066f78547ae57fd324987.jpg";
 
 export function StudentProfilePage() {
   const userData = {
@@ -112,20 +116,18 @@ export function StudentProfilePage() {
   };
 
   const [profile, setProfile] = useState<ProfileData>(userData);
-    const [isOpenModal, setIsOpenModal] = useState(false);
+  const [isOpenModal, setIsOpenModal] = useState(false);
+  const [isOpenToast, setIsOpenToast] = useState(false);
 
-    function handleChangePass() {
-        console.log('click chng pass');
-        setIsOpenModal(true);
-    }
-    
+  function handleChangePass() {
+    console.log("click chng pass");
+    setIsOpenModal(true);
+  }
+
   return (
     <ProfileWrapper>
       <Avatar
-        src={
-          userData.avatarUrl ||
-          "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.pinimg.com%2Foriginals%2Fac%2F3b%2F7c%2Fac3b7cd63b5066f78547ae57fd324987.jpg"
-        }
+        src={userData.avatarUrl || emptyAvatar}
         alt={userData.fullName || "anon"}
       />
 
@@ -150,7 +152,17 @@ export function StudentProfilePage() {
           <Button onClick={() => handleChangePass()}>Изменить пароль</Button>
         </Actions>
       </Info>
-      <ChangeModalPass open={isOpenModal} onClose={(v) => setIsOpenModal(v)} />
+      <ChangeModalPass
+        open={isOpenModal}
+        onClose={(v) => setIsOpenModal(v)}
+        onSuccess={() => setIsOpenToast(true)}
+      />
+      <Toast
+        open={isOpenToast}
+        message="sucksess"
+        type="info"
+        onClose={() => setIsOpenToast(false)}
+      ></Toast>
     </ProfileWrapper>
   );
 }

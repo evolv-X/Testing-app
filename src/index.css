@@ -3,6 +3,10 @@
   padding: 0;
   box-sizing: border-box;
 }
+body {
+background-color: #FBFBFB;
+font-family: sans-serif;
+}
 
 .active {
   color: blueviolet;

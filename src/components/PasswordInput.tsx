@@ -21,14 +21,14 @@ const InputWrapper = styled.div`
 const Input = styled.input`
   min-width: 392px;
   padding: 10px 40px 10px 12px;
-  border: 0.5px solid #09090B;
+  border: 0.5px solid #09090b;
   border-radius: ${(p) => p.theme.radius.md};
   font-size: 14px;
 
   &:focus {
     outline: none;
-    background: #E8F5FF;
-    border-color: #4094F7;
+    background: #e8f5ff;
+    border-color: #4094f7;
   }
 `;
 
@@ -51,7 +51,12 @@ const Eye = styled.button`
   }
 `;
 
-const EyeIcon = ({ open, onClick }) => (
+type EyeIconProps = {
+  open: boolean;
+  onClick: React.MouseEventHandler<HTMLButtonElement>;
+};
+
+const EyeIcon = ({ open, onClick }: EyeIconProps) => (
   <Eye onClick={onClick} type="button">
     {open ? (
       <svg
@@ -96,7 +101,14 @@ const EyeIcon = ({ open, onClick }) => (
   </Eye>
 );
 
-export function PasswordInput({ label }) {
+type PasswordInputProps = {
+  label: string;
+  type: string;
+  value: string;
+  onChange: React.Dispatch<React.SetStateAction<string>>;
+};
+
+export function PasswordInput({ label, type, onChange, value }: PasswordInputProps) {
   const [show, setShow] = useState(false);
 
   return (
@@ -104,7 +116,11 @@ export function PasswordInput({ label }) {
       <Label>{label}</Label>
 
       <InputWrapper>
-        <Input type={show ? "text" : "password"} />
+        <Input
+          type={show ? "text" : type}
+          onChange={(e) => onChange(e.target.value)}
+          value={value}
+        />
         <EyeIcon open={show} onClick={() => setShow((v) => !v)} />
       </InputWrapper>
     </Field>

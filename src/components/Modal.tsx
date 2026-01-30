@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const Overlay = styled.div`
   background: #f5f5f54d;
@@ -40,24 +40,34 @@ const CloseButton = styled.button`
   cursor: pointer;
   line-height: 1;
 
-  color: ${p => p.theme.colors.text};
+  color: ${(p) => p.theme.colors.text};
 `;
 
 const Button = styled.button`
   padding: 10px 16px;
   width: 100%;
   border-radius: ${(p) => p.theme.radius.md};
-  border: 1px solid #DDE2E4;
+  border: 1px solid #dde2e4;
   background: transparent;
   color: ${(p) => p.theme.colors.text};
   cursor: pointer;
+  transition: all 0.2s ease;
 
-  &:hover {
-    background: #E8F5FF;
-    color: #4094F7;
-    border: 1px solid #4094F7;
+  &:hover:not(:disabled) {
+    background: #e8f5ff;
+    color: #4094f7;
+    border: 1px solid #4094f7;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+    background: #f3f4f6;
+    color: #9ca3af;
+    border: 1px solid #e5e7eb;
   }
 `;
+
 
 const ButtonsContainer = styled.div`
   display: flex;
@@ -70,16 +80,19 @@ interface ModalProps {
   open: boolean;
   onClose: (v: boolean) => void;
   children: React.ReactNode;
+  disabled: boolean;
+  onSubmit: () => void;
 }
 
 export function Modal(props: ModalProps) {
-  const { open, onClose, title, children } = props;
+  const { open, onClose, title, children, disabled, onSubmit} = props;
 
   useEffect(() => {
     if (!open) return;
     const keyDwn = (e: KeyboardEvent) => {
-      e.key === "Escape";
-      onClose(false);
+      if (e.key === "Escape") {
+        onClose(false);
+      }
     };
     window.addEventListener("keydown", keyDwn);
     return () => window.removeEventListener("keydown", keyDwn);
@@ -99,7 +112,9 @@ export function Modal(props: ModalProps) {
         <div>{children}</div>
         <ButtonsContainer>
           <Button onClick={() => onClose(false)}>Отменить</Button>
-          <Button>Подтвердить</Button>
+          <Button disabled={disabled} onClick={() => onSubmit()}>
+            Подтвердить
+          </Button>
         </ButtonsContainer>
       </ModalContainer>
     </Overlay>
