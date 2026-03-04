@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 const Overlay = styled.div`
   background: #f5f5f54d;
@@ -43,7 +43,7 @@ const CloseButton = styled.button`
   color: ${(p) => p.theme.colors.text};
 `;
 
-const Button = styled.button`
+const Button = styled.button<{ variant?: string }>`
   padding: 10px 16px;
   width: 100%;
   border-radius: ${(p) => p.theme.radius.md};
@@ -54,20 +54,19 @@ const Button = styled.button`
   transition: all 0.2s ease;
 
   &:hover:not(:disabled) {
-    background: #e8f5ff;
-    color: #4094f7;
-    border: 1px solid #4094f7;
+    background: ${(p) => (p.variant === "danger" ? "#f6f3f3" : "#f3f4f6")};
+    color: ${(p) => (p.variant === "danger" ? "red" : "#4094f7")};
+    border: 1px solid ${(p) => (p.variant === "danger" ? "red" : "#4094f7")};
   }
 
   &:disabled {
     cursor: not-allowed;
     opacity: 0.5;
-    background: #f3f4f6;
+    background: ${(p) => (p.variant === "danger" ? "#f6f3f3" : "#f3f4f6")};
     color: #9ca3af;
     border: 1px solid #e5e7eb;
   }
 `;
-
 
 const ButtonsContainer = styled.div`
   display: flex;
@@ -79,13 +78,24 @@ interface ModalProps {
   title: string;
   open: boolean;
   onClose: (v: boolean) => void;
-  children: React.ReactNode;
+  children?: React.ReactNode;
   disabled: boolean;
   onSubmit: () => void;
+  cancelLabel?: string;
+  confirmLabel?: string;
 }
 
 export function Modal(props: ModalProps) {
-  const { open, onClose, title, children, disabled, onSubmit} = props;
+  const {
+    open,
+    onClose,
+    title,
+    children,
+    disabled,
+    onSubmit,
+    cancelLabel = "Отменить",
+    confirmLabel = "Подтвердить",
+  } = props;
 
   useEffect(() => {
     if (!open) return;
@@ -111,9 +121,9 @@ export function Modal(props: ModalProps) {
 
         <div>{children}</div>
         <ButtonsContainer>
-          <Button onClick={() => onClose(false)}>Отменить</Button>
+          <Button variant="danger" onClick={() => onClose(false)}>{cancelLabel}</Button>
           <Button disabled={disabled} onClick={() => onSubmit()}>
-            Подтвердить
+            {confirmLabel}
           </Button>
         </ButtonsContainer>
       </ModalContainer>

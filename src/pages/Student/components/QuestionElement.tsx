@@ -1,61 +1,70 @@
-import styled from "@emotion/styled";
+import { QuestionElementCheckbox } from './QuestionElementsTemplate/QuestionElementCheckbox';
+import { QuestionElementRadio } from './QuestionElementsTemplate/QuestionElementRadio';
+import { QuestionElementText } from './QuestionElementsTemplate/QuestionElementText';
 
-const TestItem = styled.li`
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+export type QuestionType = 'text' | 'single' | 'multiple';
 
-  padding: 16px;
-  border: 1px solid #efefef;
-  border-radius: ${p => p.theme.radius.md};
-  box-shadow: 0px 1px 2px 0px #0000000d;
-`;
+export interface QuestionBase {
+    id: number;
+    text: string;
+    type: QuestionType;
+}
 
-const QuestionText = styled.p`
-  font-size: 16px;
-  font-weight: 600;
-  margin: 0;
-`;
+export interface TextQuestion extends QuestionBase {
+    type: 'text';
+}
 
-const OptionsList = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-`;
+export interface SingleQuestion extends QuestionBase {
+    type: 'single';
+    options: string[];
+}
 
-const Option = styled.label`
-  display: flex;
-  align-items: center;
-  gap: 8px;
+export interface MultipleQuestion extends QuestionBase {
+    type: 'multiple';
+    options: string[];
+}
 
-  cursor: pointer;
+export type Question = TextQuestion | SingleQuestion | MultipleQuestion;
 
-  input {
-    cursor: pointer;
-  }
-`;
+export type AnswerValue = string | string[];
 
+export type AnswersMap = Record<number, AnswerValue>;
 
-export function QuestionElement({ t }) {
-  const isSingle = t.type === "single";
+interface QuestionElementProps {
+    q: Question;
+    value: AnswerValue;
+    onChange: (id: number, value: AnswerValue) => void;
+}
 
-  return (
-    <TestItem>
-      <QuestionText>{t.text}</QuestionText>
-
-      <OptionsList>
-        {t.options.map((o, i) => (
-          <Option key={i}>
-            <input
-              type={isSingle ? "radio" : "checkbox"}
-              name={`question-${t.id}`}
-              value={o}
-              aria-label={`Вопрос:${t.id}, v-${i}`}
+export function QuestionElement(props: QuestionElementProps) {
+    const { onChange, value, q } = props;
+    if (q.type === 'text')
+        return (
+            <QuestionElementText
+                text={q.text}
+                id={q.id}
+                onChange={onChange}
+                value={value as string}
             />
-            <span>{o}</span>
-          </Option>
-        ))}
-      </OptionsList>
-    </TestItem>
-  );
+        );
+    if (q.type === 'single')
+        return (
+            <QuestionElementRadio
+                options={q.options}
+                text={q.text}
+                id={q.id}
+                onChange={onChange}
+                value={value as string}
+            />
+        );
+    if (q.type === 'multiple')
+        return (
+            <QuestionElementCheckbox
+                options={q.options}
+                text={q.text}
+                id={q.id}
+                value={value as string[]}
+                onChange={onChange}
+            />
+        );
 }

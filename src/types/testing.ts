@@ -30,3 +30,17 @@ export type TestResult = {
   meta: TestMeta;
   attempt: Attempt;
 };
+
+
+export type QuestionType = 'single' | 'multiple' | 'text';
+
+export type Question = {
+correct: string;
+id: number;
+options: string[];
+score: number;
+shuffle: true;
+testId: number;
+text: string;
+type: QuestionType;
+};

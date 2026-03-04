@@ -1,11 +1,12 @@
 import styled from "@emotion/styled";
-import type { Attempt, TestResult } from "../../../types/testing";
+import type { Attempt, TestResult } from "../../../../types/testing";
 import {
   DateIcon,
   RetryIcon,
   TimerIcon /*, RetryIcon*/,
-} from "../../../icons/icons";
-import { ScoreFlag } from "./ScoreFlag";
+} from "../../../../icons/icons";
+import { ScoreFlag } from "./../ScoreFlag";
+import { useNavigate } from "react-router-dom";
 
 const Card = styled.article`
   padding: 34px 16px 15px 22px;
@@ -180,10 +181,18 @@ type TestCardProps = {
 
 export function TestCard(props: TestCardProps) {
   const { test, lastAttempt } = props;
+  const navigate = useNavigate();
   console.log(lastAttempt);
 
   const scoreText =
     lastAttempt?.status === "graded" ? lastAttempt!.score / 10 : null;
+
+  function handleClick() {
+    // if (btnText.name === "done") return;
+    navigate(`/student/tests/${test.id}`, {
+      state: { durationSec: test.durationSec },
+    });
+  }
 
   return (
     <Card>
@@ -220,7 +229,7 @@ export function TestCard(props: TestCardProps) {
           Можно пройти заново
         </Retry>
       </CardInfo>
-      <StartButton type="button">Пройти заново</StartButton>
+      <StartButton type="button" onClick={handleClick}>Пройти заново</StartButton>
     </Card>
   );
 }

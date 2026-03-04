@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "../../index.css";
 import styled from "@emotion/styled";
-import { TestCard } from "./components/TestCard";
+import { TestCard } from "./components/test/TestCard";
 import type { Attempt, TestResult } from "../../types/testing";
 
 const Grid = styled.div`
