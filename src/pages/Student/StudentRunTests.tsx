@@ -1,10 +1,13 @@
 import styled from "@emotion/styled";
 import { useEffect, useMemo, useState } from "react";
-import QuestionBlock from "./components/test/QuestionBlock";
+import QuestionBlock, {
+  type AnswersState,
+} from "./components/test/QuestionBlock";
 import { TimerBox } from "./components/ui/TimerBox";
-import { useLocation, useParams } from "react-router-dom";
-import type { Question, TestResult } from "../../types/testing";
+import { useNavigate, useParams } from "react-router-dom";
+import type { Question, TestResult, QuestionResult } from "../../types/testing";
 import { ConfirmModal } from "./components/test/ConfirmModal";
+import { checkQuestion } from "../../utils/checkQuestion";
 
 const Layout = styled.div``;
 
@@ -15,6 +18,9 @@ const Content = styled.div`
 
 export function StudentRunTests() {
   const [questions, setQuestions] = useState<Question[]>([]);
+  const [answers, setAnswers] = useState<AnswersState>({});
+  const [results, setResults] = useState<QuestionResult[]>([]);
+  const [showResult, setShowResult] = useState(false);
   const [testData, setTestData] = useState<TestResult | null>(null);
   const [duration, setDuration] = useState(testData?.durationSec);
   const [loading, setLoading] = useState(true);
@@ -22,10 +28,10 @@ export function StudentRunTests() {
   const [error, setError] = useState("");
   const params = useParams();
   const testId = Number(params.id);
-  const { state } = useLocation();
+  const navigate = useNavigate();
 
-  const [timeLeftSec, setTimeLeftSec] = useState(state.durationSec);
   const durationSec = testData?.durationSec ?? 600;
+  const [timeLeftSec, setTimeLeftSec] = useState(durationSec);
 
   const onSubmit = () => {
     console.log("onSubmit");
@@ -33,7 +39,6 @@ export function StudentRunTests() {
   };
 
   console.log("открыто", isOpenModal);
-  
 
   useEffect(() => {
     if (!testData) return;
@@ -62,7 +67,6 @@ export function StudentRunTests() {
     [testId, questions],
   );
 
-
   useEffect(() => {
     const data = "/data/tests.json";
 
@@ -84,8 +88,54 @@ export function StudentRunTests() {
 
   function handleSubmit() {
     // потом чтобы высчитать durationSec - timeLeftSec : итог времени теста
-    const result = durationSec - timeLeftSec;
-    console.log("result", result);
+    const resultTime = durationSec - timeLeftSec;
+
+    let correctCount = 0;
+    const testResults: QuestionResult[] = filtredQuestions.map((q) => {
+      const answer = answers[q.id];
+      const checkRes = checkQuestion(q, answer);
+
+      if (checkRes.status === "correct") {
+        correctCount += checkRes.score;
+      }
+
+      return {
+        questionId: q.id,
+        score: checkRes.score,
+        correctAnswer: q.correct,
+        userAnswer: answer,
+        isCorrect: checkRes.status === "correct",
+        maxScore: checkRes.maxScore,
+      };
+    });
+
+    setIsOpenModal(false);
+    setResults(testResults);
+    setShowResult(true);
+
+    const resultAnswer = testResults.reduce((acc, cur) => acc + cur.score, 0);
+
+    const resultMax = testResults.reduce((acc, cur) => acc + cur.maxScore, 0);
+
+    console.log(resultAnswer);
+    console.log(resultMax);
+
+    // console.log('Answers Result Object:', testResults);
+    // console.log(`${correctCount}/${filtredQuestions.length}`);
+    // console.log('result time', resultTime);
+
+    if (testData && testData.attemptsAllowed > 1 && testData.allowRetry) {
+      navigate(`/student/tests/${testId}/result`, {
+        replace: true,
+        state: {
+          resultMax,
+          resultAnswer,
+          durationSec: timeLeftSec,
+          resultTime,
+          attemptsAllowed: testData.attemptsAllowed,
+        },
+      });
+    }
   }
 
   if (loading) {
@@ -132,11 +182,18 @@ export function StudentRunTests() {
           loading={loading}
           error={error}
           testId={testId}
+          answers={answers}
+          onChange={(id, value) =>
+            setAnswers((prev) => ({ ...prev, [id]: value }))
+          }
+          showResult={showResult}
+          results={results}
         />
         {duration != null && (
           <TimerBox
             durationSec={duration}
-            onTick={() => setTimeLeftSec}
+            finished={showResult}
+            onTick={(timeLeft) => setTimeLeftSec(timeLeft)}
             onFinish={() => {
               alert("Тест завершён! Ваши ответы сохранены.");
               handleSubmit();
@@ -144,7 +201,9 @@ export function StudentRunTests() {
           />
         )}
       </Content>
-      <button onClick={() => setIsOpenModal(true)}>Отправить</button>
+      {!showResult && (
+        <button onClick={() => setIsOpenModal(true)}>Отправить</button>
+      )}
       <ConfirmModal
         open={isOpenModal}
         onClose={(v) => setIsOpenModal(v)}

@@ -1,0 +1,2 @@
+// App Global Store
+export {};

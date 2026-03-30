@@ -9,6 +9,8 @@ import { StudentRunTests } from "../pages/Student/StudentRunTests";
 import { StudentLayout } from "../layouts/StudentLayout";
 import { AdminLayout } from "../layouts/AdminLayout";
 import { StudentProfilePage } from "../components/StudentProfilePage";
+import { StudentResultPage } from "../pages/Student/StudentResultPage";
+import { StudentStatistic } from "../pages/Student/StudentStatistic";
 
 export const router = createBrowserRouter([
   {
@@ -22,7 +24,8 @@ export const router = createBrowserRouter([
           { index: true, element: <StudentPage /> },
           { path: "tests", element: <StudentTestPage /> },
           { path: "tests/:id", element: <StudentRunTests /> },
-          { path: "statistics", element: <h2>statistics</h2> },
+          { path: "tests/:id/result", element: <StudentResultPage /> },
+          { path: "statistics", element: <StudentStatistic /> },
           { path: "profile", element: <StudentProfilePage /> },
         ],
       },

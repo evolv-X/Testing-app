@@ -2,29 +2,8 @@ import { QuestionElementCheckbox } from './QuestionElementsTemplate/QuestionElem
 import { QuestionElementRadio } from './QuestionElementsTemplate/QuestionElementRadio';
 import { QuestionElementText } from './QuestionElementsTemplate/QuestionElementText';
 
-export type QuestionType = 'text' | 'single' | 'multiple';
-
-export interface QuestionBase {
-    id: number;
-    text: string;
-    type: QuestionType;
-}
-
-export interface TextQuestion extends QuestionBase {
-    type: 'text';
-}
-
-export interface SingleQuestion extends QuestionBase {
-    type: 'single';
-    options: string[];
-}
-
-export interface MultipleQuestion extends QuestionBase {
-    type: 'multiple';
-    options: string[];
-}
-
-export type Question = TextQuestion | SingleQuestion | MultipleQuestion;
+export type { Question, QuestionType } from '../../../types/testing';
+import type { Question } from '../../../types/testing';
 
 export type AnswerValue = string | string[];
 

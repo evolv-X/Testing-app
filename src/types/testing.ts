@@ -28,19 +28,43 @@ export type TestResult = {
   deadlineISO: string;
   tags: string[];
   meta: TestMeta;
+  isPublished?: boolean;
   attempt: Attempt;
 };
 
 
 export type QuestionType = 'single' | 'multiple' | 'text';
 
-export type Question = {
-correct: string;
+export type QuestionBase = {
+correct?: string | string[];
 id: number;
-options: string[];
 score: number;
-shuffle: true;
+shuffle?: boolean;
 testId: number;
 text: string;
-type: QuestionType;
 };
+
+export type TextQuestion = QuestionBase & {
+  type: 'text';
+};
+
+export type SingleQuestion = QuestionBase & {
+  type: 'single';
+  options: string[];
+};
+
+export type MultipleQuestion = QuestionBase & {
+  type: 'multiple';
+  options: string[];
+};
+
+export type Question = TextQuestion | SingleQuestion | MultipleQuestion;
+
+export type QuestionResult = {
+  questionId: number;
+  score: number;
+  correctAnswer?: string | string[];
+  userAnswer?: string | string[];
+  isCorrect: boolean;
+  maxScore: number;
+};

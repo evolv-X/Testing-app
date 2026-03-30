@@ -1,60 +1,40 @@
-import { useEffect, useState } from "react";
-import "../../index.css";
+import { useEffect, useMemo } from "react";
+import { observer } from "mobx-react-lite";
 import styled from "@emotion/styled";
+import "../../index.css";
 import { TestCard } from "./components/test/TestCard";
-import type { Attempt, TestResult } from "../../types/testing";
+import { useStore } from "../Store/useStore";
+import { StudentTestPageVM } from "./StudentTestPageVM";
 
 const Grid = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
 `;
 
-export function StudentTestPage() {
-  const [tests, setTests] = useState<TestResult[]>([]);
-  const [attempt, setAttempt] = useState<Attempt[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState();
-
-  console.log(tests);
-  console.log(attempt);
+export const StudentTestPage = observer(() => {
+  const rootStore = useStore();
+  const vm = useMemo(() => new StudentTestPageVM(rootStore), [rootStore]);
 
   useEffect(() => {
-    const tests = "/public/data/tests.json";
-    const attempt = "/public/data/attempts.json";
-    Promise.all([fetch(tests), fetch(attempt)])
-      .then(async ([res1, res2]) => {
-        if (!res1.ok) throw new Error(`http: ${res1.status}`);
-        if (!res2.ok) throw new Error(`http: ${res2.status}`);
+    vm.store.load();
+  }, [vm]);
 
-        console.log(res2);
-
-        const t = await res1.json();
-        const a = await res2.json();
-
-        setTests(t);
-        setAttempt(a);
-        setLoading(false)
-        // return Promise.all([t, a]);
-      })
-      .catch((error) => {
-        console.log(error.message);
-        
-        setError(error.message);
-      });
-  }, []);
-  // if (true) return <h1>123</h1>;
-  if (error) return <div>{error}</div>;
-  if (loading) return <div className="custom-loader"></div>;
+  if (vm.error) return <div>{vm.error}</div>;
+  if (vm.loading) return <div className="custom-loader"></div>;
 
   return (
     <div>
       <Grid>
         <div>
-          {tests.map((test) => (
-            <TestCard key={test.id} test={test} lastAttempt={attempt[0]}/>
+          {vm.visibleTests.map((test) => (
+            <TestCard
+              key={test.id}
+              test={test}
+              lastAttempt={vm.lastAttemptByTest.get(test.id)}
+            />
           ))}
         </div>
       </Grid>
     </div>
   );
-}
+});

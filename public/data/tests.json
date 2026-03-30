@@ -3,7 +3,7 @@
     "id": 1,
     "title": "Тестирование №10",
     "shortDescription": "Описание тестирования длинный текст дадададада…",
-    "durationSec": 2000,
+    "durationSec": 20,
     "passScore": 70,
     "attemptsAllowed": 3,
     "allowRetry": true,

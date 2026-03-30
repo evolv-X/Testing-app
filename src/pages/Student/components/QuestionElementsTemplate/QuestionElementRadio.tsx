@@ -2,13 +2,113 @@ import styled from '@emotion/styled';
 
 const TestItem = styled.li`
     display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    padding: 16px 16px;
-    border: 1px solid #efefef;
-    border-radius: ${p => p.theme.radius.md};
-    box-shadow: 0px 1px 2px 0px #0000000d;
+    flex-direction: column;
+    padding: 24px;
+    background: #ffffff;
+    border: 1px solid #f0f0f0;
+    border-radius: 12px;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.04);
+    margin-bottom: 24px;
+    list-style: none; /* remove bullet point if it exists */
 `;
+
+const Header = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    width: 100%;
+`;
+
+const Badge = styled.div`
+    background: #f8f9fa;
+    padding: 6px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    color: #111;
+`;
+
+const TypeBadgeWrapper = styled.div`
+    display: flex;
+    gap: 8px;
+`;
+
+const TypeBadge = styled.div`
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    padding: 6px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #374151;
+`;
+
+const QuestionText = styled.div`
+    font-weight: 600;
+    font-size: 18px;
+    color: #111827;
+    margin: 0;
+    white-space: pre-wrap;
+`;
+
+const OptionsList = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 24px;
+    width: 100%;
+`;
+
+const OptionLabel = styled.label`
+    display: flex;
+    align-items: center;
+    padding: 14px 16px;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 15px;
+    color: #374151;
+    gap: 12px;
+    user-select: none;
+
+    &:hover {
+        background: #f9fafb;
+    }
+`;
+
+const HiddenInput = styled.input`
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+`;
+
+const StyledRadio = styled.div<{ checked: boolean }>`
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1px solid ${p => p.checked ? '#3b82f6' : '#d1d5db'};
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.2s;
+
+    &::after {
+        content: '';
+        display: block;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: #3b82f6;
+        opacity: ${p => p.checked ? 1 : 0};
+        transform: ${p => p.checked ? 'scale(1)' : 'scale(0)'};
+        transition: all 0.2s;
+    }
+`;
+
 interface QuestionElementRadioProps {
     id: number;
     text: string;
@@ -21,20 +121,33 @@ export function QuestionElementRadio(props: QuestionElementRadioProps) {
     const { id, text, options, onChange, value } = props;
     return (
         <TestItem>
-            <p>{text}</p>
-            {options.map((o, i) => (
-                <label key={o}>
-                    <input
-                        type="radio"
-                        name={`q-${id}`}
-                        value={o}
-                        checked={value === o}
-                        aria-label={`Вопрос:${id}, v-${i}`}
-                        onChange={() => onChange(id, o)}
-                    />
-                    {o}
-                </label>
-            ))}
+            <Header>
+                <Badge>№{id}</Badge>
+                <TypeBadgeWrapper>
+                    <TypeBadge>Один вариант</TypeBadge>
+                    <TypeBadge>1 балл</TypeBadge>
+                </TypeBadgeWrapper>
+            </Header>
+            <QuestionText>{text}</QuestionText>
+            <OptionsList>
+                {options.map((o, i) => {
+                    const isChecked = value === o;
+                    return (
+                        <OptionLabel key={o}>
+                            <HiddenInput
+                                type="radio"
+                                name={`q-${id}`}
+                                value={o}
+                                checked={isChecked}
+                                aria-label={`Вопрос:${id}, v-${i}`}
+                                onChange={() => onChange(id, o)}
+                            />
+                            <StyledRadio checked={isChecked} />
+                            {o}
+                        </OptionLabel>
+                    );
+                })}
+            </OptionsList>
         </TestItem>
     );
 }

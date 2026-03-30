@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import styled from "@emotion/styled";
 
-const Timer = styled.div<{ danger: boolean }>`
+const Timer = styled.div<{ danger: boolean; finished: boolean }>`
   padding: 20px 62.5px;
   border-radius: 10px;
   display: flex;
@@ -11,31 +11,34 @@ const Timer = styled.div<{ danger: boolean }>`
   gap: 10px;
   max-width: 321px;
   height: 132px;
-  border: 1px solid ${(p) => (p.danger ? "#ff0000" : "blue")};
+  border: 1px solid
+    ${(p) => (p.finished ? "#e5e7eb" : p.danger ? "#ffb3b3" : "#cfe0ff")};
   .subtitle {
     font-weight: 400;
     font-size: 16px;
     line-height: 1;
-    color: ${(p) => (p.danger ? "#ff0000" : "blue")};
+    color: ${(p) =>
+      p.finished ? "#475569" : p.danger ? "#e00000" : "#1b5de0"};
   }
   .duration {
     font-weight: 700;
     font-size: 66px;
     line-height: 1;
-    color: ${(p) => (p.danger ? "#ff0000" : "blue")};
+    color: ${(p) =>
+      p.finished ? "#475569" : p.danger ? "#e00000" : "#1b5de0"};
   }
 `;
 
 type TimerBoxProps = {
   durationSec: number;
-  onFinish: () => void;
-  onTick: () => void;
+  onFinish?: () => void;
+  onTick?: (timeLeft: number) => void;
+  finished?: boolean;
 };
 
 export function TimerBox(props: TimerBoxProps) {
-  const { durationSec, onFinish, onTick } = props;
+  const { durationSec, onFinish, onTick, finished = false } = props;
   const [duration, setDuration] = useState(durationSec);
-  const [finished, setFinished] = useState(false);
 
   useEffect(() => {
     if (finished) return;
@@ -49,12 +52,18 @@ export function TimerBox(props: TimerBoxProps) {
       });
     }, 1000);
     return () => clearInterval(id);
-  });
+  }, [finished]);
 
   useEffect(() => {
-    if (!finished) return;
-    onFinish?.();
-  }, [onFinish, duration]);
+    if (duration === 0 && !finished) {
+      onFinish?.();
+    }
+
+    // Call onTick when duration changes
+    if (!finished && onTick) {
+      onTick(duration);
+    }
+  }, [duration, finished, onFinish, onTick]);
 
   const formatTime = useMemo(() => {
     const minutes = Math.floor(duration / 60)
@@ -68,10 +77,10 @@ export function TimerBox(props: TimerBoxProps) {
     return `${minutes}:${remainingSeconds}`;
   }, [duration]);
 
-  const danger = duration < durationSec / 4;
+  const danger = duration <= durationSec / 4;
 
   return (
-    <Timer danger={danger}>
+    <Timer danger={danger} finished={finished}>
       <h4 className="subtitle">Осталось времени:</h4>
       <div className="duration">{formatTime}</div>
     </Timer>

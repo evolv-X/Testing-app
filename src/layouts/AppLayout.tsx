@@ -1,14 +1,17 @@
 import { Outlet } from "react-router-dom";
 import { NavMenu } from "../components/NavMenu";
+import { StoreProvider } from "../pages/Store/StoreProvider";
 
 export function AppLayout() {
   return (
     <>
       <main>
         <NavMenu></NavMenu>
-        <Outlet />
+        <StoreProvider>
+          <Outlet />
+        </StoreProvider>
       </main>
-      <footer>2025</footer>
+      <footer>2026</footer>
     </>
   );
 }
