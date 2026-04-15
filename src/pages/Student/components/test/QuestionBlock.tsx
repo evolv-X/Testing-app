@@ -1,10 +1,8 @@
-import React, { PureComponent } from "react";
-import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
 import { QuestionElement, type Question } from "../QuestionElement";
 import type { QuestionResult } from "../../../../types/testing";
+import { observer } from "mobx-react-lite";
 
-export type AnswersState = Record<string, string | string[]>;
+export type AnswersState = Record<number, string | string[]>;
 
 type QuestionBlockProps = {
   questions: Question[];
@@ -17,7 +15,7 @@ type QuestionBlockProps = {
   results?: QuestionResult[];
 };
 
-export default function QuestionBlock(props: QuestionBlockProps) {
+const QuestionBlock = observer((props: QuestionBlockProps) => {
   const {
     questions,
     loading,
@@ -59,4 +57,6 @@ export default function QuestionBlock(props: QuestionBlockProps) {
       )}
     </div>
   );
-}
+});
+
+export default QuestionBlock;

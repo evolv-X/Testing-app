@@ -1,6 +1,6 @@
 import { Activity, useEffect } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { TimerBox } from "./components/ui/TimerBox";
+import TimerBox from "./components/ui/TimerBox";
 
 export function StudentResultPage() {
   const { id } = useParams();

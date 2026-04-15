@@ -2,6 +2,7 @@ import { Modal } from "./Modal";
 import styled from "@emotion/styled";
 import { PasswordInput } from "./PasswordInput";
 import { useState } from "react";
+import { useStore } from "../pages/Store/useStore";
 
 interface ChangeModalPassProps {
   open: boolean;
@@ -25,6 +26,7 @@ const TextError = styled.pre`
 
 export default function ChangeModalPass(props: ChangeModalPassProps) {
   const { open, onClose, onSuccess } = props;
+  const { modalStore } = useStore();
   const [pw1, setPw1] = useState("");
   const [pw2, setPw2] = useState("");
   const [serverErr, setServerErr] = useState("");
@@ -80,14 +82,26 @@ export default function ChangeModalPass(props: ChangeModalPassProps) {
       setSubmitting(false);
     }
   }
+  if (open) modalStore.openModal("changePass");
+  modalStore.setOnClose(() => onClose(false));
+  modalStore.setSubmit(() => onSubmit());
+  modalStore.setDisabled(!formValid || submitting);
 
   return (
     <Modal
-      title="Сменить пароль"
-      open={open}
-      onClose={() => onClose(false)}
-      disabled={!formValid || submitting}
-      onSubmit={() => onSubmit()}
+      title={modalStore.title}
+      open={modalStore.open}
+      onClose={(v) => {
+        modalStore.closeModal();
+        modalStore.onClose(v);
+      }}
+      disabled={modalStore.disabled}
+      onSubmit={() => {
+        modalStore.closeModal();
+        modalStore.onSubmit();
+      }}
+      cancelLabel={modalStore.cancelLabel}
+      confirmLabel={modalStore.confirmLabel}
     >
       <ChildContainer>
         <PasswordInput

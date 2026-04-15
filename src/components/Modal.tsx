@@ -121,7 +121,9 @@ export function Modal(props: ModalProps) {
 
         <div>{children}</div>
         <ButtonsContainer>
-          <Button variant="danger" onClick={() => onClose(false)}>{cancelLabel}</Button>
+          <Button variant="danger" onClick={() => onClose(false)}>
+            {cancelLabel}
+          </Button>
           <Button disabled={disabled} onClick={() => onSubmit()}>
             {confirmLabel}
           </Button>

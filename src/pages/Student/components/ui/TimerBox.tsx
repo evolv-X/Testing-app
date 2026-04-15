@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import styled from "@emotion/styled";
+import { observer } from "mobx-react-lite";
 
 const Timer = styled.div<{ danger: boolean; finished: boolean }>`
   padding: 20px 62.5px;
@@ -36,9 +37,13 @@ type TimerBoxProps = {
   finished?: boolean;
 };
 
-export function TimerBox(props: TimerBoxProps) {
+const TimerBox = observer((props: TimerBoxProps) => {
   const { durationSec, onFinish, onTick, finished = false } = props;
   const [duration, setDuration] = useState(durationSec);
+
+  useEffect(() => {
+    setDuration(durationSec);
+  }, [durationSec]);
 
   useEffect(() => {
     if (finished) return;
@@ -85,4 +90,6 @@ export function TimerBox(props: TimerBoxProps) {
       <div className="duration">{formatTime}</div>
     </Timer>
   );
-}
+});
+
+export default TimerBox;

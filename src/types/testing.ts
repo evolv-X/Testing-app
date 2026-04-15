@@ -32,29 +32,28 @@ export type TestResult = {
   attempt: Attempt;
 };
 
-
-export type QuestionType = 'single' | 'multiple' | 'text';
+export type QuestionType = "single" | "multiple" | "text";
 
 export type QuestionBase = {
-correct?: string | string[];
-id: number;
-score: number;
-shuffle?: boolean;
-testId: number;
-text: string;
+  correct?: string | string[];
+  id: number;
+  score: number;
+  shuffle?: boolean;
+  testId: number;
+  text: string;
 };
 
 export type TextQuestion = QuestionBase & {
-  type: 'text';
+  type: "text";
 };
 
 export type SingleQuestion = QuestionBase & {
-  type: 'single';
+  type: "single";
   options: string[];
 };
 
 export type MultipleQuestion = QuestionBase & {
-  type: 'multiple';
+  type: "multiple";
   options: string[];
 };
 
@@ -67,4 +66,11 @@ export type QuestionResult = {
   userAnswer?: string | string[];
   isCorrect: boolean;
   maxScore: number;
-};
+};
+
+export type UiStateLoading = {
+  isLoading: boolean;
+  error: string;
+  finished: boolean;
+  remainingTime: number;
+};

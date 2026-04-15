@@ -1,13 +1,11 @@
 import styled from "@emotion/styled";
-import { useEffect, useMemo, useState } from "react";
-import QuestionBlock, {
-  type AnswersState,
-} from "./components/test/QuestionBlock";
-import { TimerBox } from "./components/ui/TimerBox";
+import { useState, useEffect } from "react";
+import QuestionBlock from "./components/test/QuestionBlock";
+import TimerBox from "./components/ui/TimerBox";
 import { useNavigate, useParams } from "react-router-dom";
-import type { Question, TestResult, QuestionResult } from "../../types/testing";
-import { ConfirmModal } from "./components/test/ConfirmModal";
-import { checkQuestion } from "../../utils/checkQuestion";
+import { useStore } from "../Store/useStore";
+import { observer } from "mobx-react-lite";
+import { Modal } from "../../components/Modal";
 
 const Layout = styled.div``;
 
@@ -16,129 +14,34 @@ const Content = styled.div`
   grid-template-columns: 1fr 500px;
 `;
 
-export function StudentRunTests() {
-  const [questions, setQuestions] = useState<Question[]>([]);
-  const [answers, setAnswers] = useState<AnswersState>({});
-  const [results, setResults] = useState<QuestionResult[]>([]);
-  const [showResult, setShowResult] = useState(false);
-  const [testData, setTestData] = useState<TestResult | null>(null);
-  const [duration, setDuration] = useState(testData?.durationSec);
-  const [loading, setLoading] = useState(true);
-  const [isOpenModal, setIsOpenModal] = useState(false);
-  const [error, setError] = useState("");
+export const StudentRunTests = observer(() => {
+  const { testRunPageVM } = useStore();
   const params = useParams();
+  const { modalStore } = useStore();
   const testId = Number(params.id);
   const navigate = useNavigate();
-
-  const durationSec = testData?.durationSec ?? 600;
-  const [timeLeftSec, setTimeLeftSec] = useState(durationSec);
-
-  const onSubmit = () => {
-    console.log("onSubmit");
-    handleSubmit();
-  };
-
-  console.log("открыто", isOpenModal);
-
   useEffect(() => {
-    if (!testData) return;
-    setTimeLeftSec(durationSec);
-  }, [testData]);
+    testRunPageVM.init(testId);
+  }, [testId, testRunPageVM]);
+  const {
+    uiStateLoading,
+    questions,
+    answers,
+    showResult,
+    result,
+    durationSec,
+    setAnswer,
+    setTimeLeftSec,
+    submit,
+  } = testRunPageVM.rootStore.testRunStore;
 
-  useEffect(() => {
-    const data = "/data/questions.json";
+  // console.log(uiStateLoading);
 
-    fetch(data)
-      .then((response) => {
-        if (!response.ok) throw new Error(`HTTP: ${response.status}`);
-        return response.json();
-      })
-      .then((data: Question[]) => {
-        setQuestions(data);
-      })
-      .catch((e) => {
-        setError(e.message);
-      })
-      .finally(() => setLoading(false));
-  }, [testId]);
+  const { isLoading, error } = uiStateLoading;
 
-  const filtredQuestions = useMemo(
-    () => questions.filter((q) => q.testId === testId),
-    [testId, questions],
-  );
+  const [isOpenModal, setIsOpenModal] = useState(false);
 
-  useEffect(() => {
-    const data = "/data/tests.json";
-
-    fetch(data)
-      .then((response) => {
-        if (!response.ok) throw new Error(`HTTP: ${response.status}`);
-        return response.json();
-      })
-      .then((tests: TestResult[]) => {
-        const filtredTest = tests.find((t) => t.id === testId);
-        setTestData(filtredTest ?? null);
-        setDuration(filtredTest?.durationSec ?? 600);
-      })
-      .catch((e) => {
-        setError(e.message);
-      })
-      .finally(() => setLoading(false));
-  }, [testId]);
-
-  function handleSubmit() {
-    // потом чтобы высчитать durationSec - timeLeftSec : итог времени теста
-    const resultTime = durationSec - timeLeftSec;
-
-    let correctCount = 0;
-    const testResults: QuestionResult[] = filtredQuestions.map((q) => {
-      const answer = answers[q.id];
-      const checkRes = checkQuestion(q, answer);
-
-      if (checkRes.status === "correct") {
-        correctCount += checkRes.score;
-      }
-
-      return {
-        questionId: q.id,
-        score: checkRes.score,
-        correctAnswer: q.correct,
-        userAnswer: answer,
-        isCorrect: checkRes.status === "correct",
-        maxScore: checkRes.maxScore,
-      };
-    });
-
-    setIsOpenModal(false);
-    setResults(testResults);
-    setShowResult(true);
-
-    const resultAnswer = testResults.reduce((acc, cur) => acc + cur.score, 0);
-
-    const resultMax = testResults.reduce((acc, cur) => acc + cur.maxScore, 0);
-
-    console.log(resultAnswer);
-    console.log(resultMax);
-
-    // console.log('Answers Result Object:', testResults);
-    // console.log(`${correctCount}/${filtredQuestions.length}`);
-    // console.log('result time', resultTime);
-
-    if (testData && testData.attemptsAllowed > 1 && testData.allowRetry) {
-      navigate(`/student/tests/${testId}/result`, {
-        replace: true,
-        state: {
-          resultMax,
-          resultAnswer,
-          durationSec: timeLeftSec,
-          resultTime,
-          attemptsAllowed: testData.attemptsAllowed,
-        },
-      });
-    }
-  }
-
-  if (loading) {
+  if (isLoading) {
     return (
       <Layout>
         <header>Test 100</header>
@@ -173,30 +76,33 @@ export function StudentRunTests() {
     );
   }
 
+  if (isOpenModal) modalStore.openModal("confirmEnd");
+  modalStore.setOnClose(() => setIsOpenModal(false));
+  modalStore.setSubmit(() => submit(navigate));
+  modalStore.setDisabled(false);
+
   return (
     <Layout>
       <header>Test 100</header>
       <Content>
         <QuestionBlock
-          questions={filtredQuestions}
-          loading={loading}
+          questions={questions}
+          loading={isLoading}
           error={error}
           testId={testId}
           answers={answers}
-          onChange={(id, value) =>
-            setAnswers((prev) => ({ ...prev, [id]: value }))
-          }
+          onChange={(id, value) => setAnswer(id, value)}
           showResult={showResult}
-          results={results}
+          results={result}
         />
-        {duration != null && (
+        {durationSec != null && (
           <TimerBox
-            durationSec={duration}
+            durationSec={durationSec}
             finished={showResult}
-            onTick={(timeLeft) => setTimeLeftSec(timeLeft)}
+            onTick={(timeLeft: number | null) => setTimeLeftSec(timeLeft)}
             onFinish={() => {
               alert("Тест завершён! Ваши ответы сохранены.");
-              handleSubmit();
+              submit(navigate);
             }}
           />
         )}
@@ -204,12 +110,21 @@ export function StudentRunTests() {
       {!showResult && (
         <button onClick={() => setIsOpenModal(true)}>Отправить</button>
       )}
-      <ConfirmModal
-        open={isOpenModal}
-        onClose={(v) => setIsOpenModal(v)}
-        onSuccess={() => onSubmit()}
-        title={"Хотите закончить тестирование?"}
+      <Modal
+        title={modalStore.title}
+        open={modalStore.open}
+        onClose={(v) => {
+          modalStore.closeModal();
+          modalStore.onClose(v);
+        }}
+        disabled={modalStore.disabled}
+        onSubmit={() => {
+          modalStore.closeModal();
+          modalStore.onSubmit();
+        }}
+        cancelLabel={modalStore.cancelLabel}
+        confirmLabel={modalStore.confirmLabel}
       />
     </Layout>
   );
-}
+});

@@ -9,6 +9,7 @@ export function AppLayout() {
         <NavMenu></NavMenu>
         <StoreProvider>
           <Outlet />
+          {/* ТУТ ДОЛЖЕН БЫТЬ КОМПОНЕНТ ModalHost ШАГ 8*/}
         </StoreProvider>
       </main>
       <footer>2026</footer>
