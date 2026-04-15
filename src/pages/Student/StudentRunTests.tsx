@@ -17,7 +17,6 @@ const Content = styled.div`
 export const StudentRunTests = observer(() => {
   const { testRunPageVM } = useStore();
   const params = useParams();
-  const { modalStore } = useStore();
   const testId = Number(params.id);
   const navigate = useNavigate();
   useEffect(() => {
@@ -38,8 +37,6 @@ export const StudentRunTests = observer(() => {
   // console.log(uiStateLoading);
 
   const { isLoading, error } = uiStateLoading;
-
-  const [isOpenModal, setIsOpenModal] = useState(false);
 
   if (isLoading) {
     return (
@@ -76,11 +73,6 @@ export const StudentRunTests = observer(() => {
     );
   }
 
-  if (isOpenModal) modalStore.openModal("confirmEnd");
-  modalStore.setOnClose(() => setIsOpenModal(false));
-  modalStore.setSubmit(() => submit(navigate));
-  modalStore.setDisabled(false);
-
   return (
     <Layout>
       <header>Test 100</header>
@@ -108,23 +100,10 @@ export const StudentRunTests = observer(() => {
         )}
       </Content>
       {!showResult && (
-        <button onClick={() => setIsOpenModal(true)}>Отправить</button>
+        <button onClick={() => testRunPageVM.requestFinish(navigate)}>
+          Отправить
+        </button>
       )}
-      <Modal
-        title={modalStore.title}
-        open={modalStore.open}
-        onClose={(v) => {
-          modalStore.closeModal();
-          modalStore.onClose(v);
-        }}
-        disabled={modalStore.disabled}
-        onSubmit={() => {
-          modalStore.closeModal();
-          modalStore.onSubmit();
-        }}
-        cancelLabel={modalStore.cancelLabel}
-        confirmLabel={modalStore.confirmLabel}
-      />
     </Layout>
   );
 });

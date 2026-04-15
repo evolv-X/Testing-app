@@ -1,7 +1,8 @@
 import styled from "@emotion/styled";
-import { useState } from "react";
-import ChangeModalPass from "./ChangeModalPass";
+import { useEffect, useState } from "react";
 import { Toast } from "./ui/Toast";
+import { useStore } from "../pages/Store/useStore";
+import { useParams } from "react-router-dom";
 
 type GroupLearning = { group: string; course: string; direction: string };
 
@@ -101,6 +102,12 @@ const emptyAvatar =
   "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.pinimg.com%2Foriginals%2Fac%2F3b%2F7c%2Fac3b7cd63b5066f78547ae57fd324987.jpg";
 
 export function StudentProfilePage() {
+  const { testRunPageVM } = useStore();
+  const params = useParams();
+  const testId = Number(params.id);
+  useEffect(() => {
+    testRunPageVM.init(testId);
+  }, [testId, testRunPageVM]);
   const userData = {
     fullName: "Иванов Арсений Юрьевич",
     achivment: "КОД",
@@ -115,14 +122,12 @@ export function StudentProfilePage() {
     learning: [{ group: "КФ3", course: "3 курс", direction: "Frontend" }],
   };
 
-  const [profile, setProfile] = useState<ProfileData>(userData);
-  const [isOpenModal, setIsOpenModal] = useState(false);
   const [isOpenToast, setIsOpenToast] = useState(false);
 
-  function handleChangePass() {
-    console.log("click chng pass");
-    setIsOpenModal(true);
-  }
+  // function handleChangePass() {
+  //   console.log("click chng pass");
+  //   setIsOpenModal(true);
+  // }
 
   return (
     <ProfileWrapper>
@@ -149,14 +154,11 @@ export function StudentProfilePage() {
 
         <Actions>
           <Button>Поменять фото</Button>
-          <Button onClick={() => handleChangePass()}>Изменить пароль</Button>
+          <Button onClick={() => testRunPageVM.requestChangePass()}>
+            Изменить пароль
+          </Button>
         </Actions>
       </Info>
-      <ChangeModalPass
-        open={isOpenModal}
-        onClose={(v) => setIsOpenModal(v)}
-        onSuccess={() => setIsOpenToast(true)}
-      />
       <Toast
         open={isOpenToast}
         message="sucksess"

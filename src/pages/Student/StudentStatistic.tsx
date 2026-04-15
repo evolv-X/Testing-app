@@ -15,17 +15,18 @@ export const StudentStatistic = observer(() => {
       <button onClick={() => increment()}>+</button>
       <button onClick={() => decrement()}>-</button>
       <button onClick={() => reset()}>reset</button>
-      <button onClick={() => {
-        modalStore.setTitle('Пример модалки из стора');
-        modalStore.setSubmit(() => {
-          console.log('Подтверждено в статистике студента');
-          modalStore.closeModal();
-        });
-        modalStore.openModal();
-      }}>
+      <button
+        onClick={() => {
+          modalStore.setTitle("Пример модалки из стора");
+          modalStore.setSubmit(() => {
+            console.log("Подтверждено в статистике студента");
+            modalStore.closeModal();
+          });
+          modalStore.openModal();
+        }}
+      >
         Открыть модальное окно
       </button>
-
       <Modal
         title={modalStore.title}
         open={modalStore.open}
@@ -35,7 +36,10 @@ export const StudentStatistic = observer(() => {
         cancelLabel={modalStore.cancelLabel}
         confirmLabel={modalStore.confirmLabel}
       >
-        <p>Это пример контента модального окна, которое управляется через ModalStore.</p>
+        <p>
+          Это пример контента модального окна, которое управляется через
+          ModalStore.
+        </p>
       </Modal>
     </div>
   );

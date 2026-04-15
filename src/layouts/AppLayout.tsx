@@ -1,6 +1,7 @@
 import { Outlet } from "react-router-dom";
 import { NavMenu } from "../components/NavMenu";
 import { StoreProvider } from "../pages/Store/StoreProvider";
+import ModalHost from "../components/ui/ModalHost";
 
 export function AppLayout() {
   return (
@@ -9,7 +10,7 @@ export function AppLayout() {
         <NavMenu></NavMenu>
         <StoreProvider>
           <Outlet />
-          {/* ТУТ ДОЛЖЕН БЫТЬ КОМПОНЕНТ ModalHost ШАГ 8*/}
+          <ModalHost />
         </StoreProvider>
       </main>
       <footer>2026</footer>

@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { useEffect } from "react";
+import { useEffect, type ReactNode } from "react";
 
 const Overlay = styled.div`
   background: #f5f5f54d;
@@ -78,7 +78,7 @@ interface ModalProps {
   title: string;
   open: boolean;
   onClose: (v: boolean) => void;
-  children?: React.ReactNode;
+  children?: ReactNode;
   disabled: boolean;
   onSubmit: () => void;
   cancelLabel?: string;
@@ -108,7 +108,7 @@ export function Modal(props: ModalProps) {
     return () => window.removeEventListener("keydown", keyDwn);
   }, [open, onClose]);
 
-  if (!open) return;
+  if (!open) return null;
 
   console.log(open);
   return (

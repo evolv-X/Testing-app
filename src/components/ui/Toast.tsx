@@ -40,18 +40,23 @@ type ToastProps = {
   type: "success" | "error" | "info";
 };
 
-export function Toast({ open, message, onClose, duration=3000, type }: ToastProps) {
-  
-  useEffect (()=>{
+export function Toast({
+  open,
+  message,
+  onClose,
+  duration = 3000,
+  type,
+}: ToastProps) {
+  useEffect(() => {
     if (!open) return;
-    const t = setTimeout(()=> {
+    const t = setTimeout(() => {
       onClose();
     }, duration);
     return () => clearTimeout(t);
-  }, [open, onClose, duration])
+  }, [open, onClose, duration]);
 
   if (!open) return null;
-  
+
   return (
     <Notice>
       <Content>

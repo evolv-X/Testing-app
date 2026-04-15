@@ -1,4 +1,4 @@
-import { makeAutoObservable, runInAction } from "mobx";
+import { makeAutoObservable, observable } from "mobx";
 
 export class ModalStore {
   title: string;
@@ -17,7 +17,7 @@ export class ModalStore {
     this.onSubmit = () => {};
     this.cancelLabel = "Отменить";
     this.confirmLabel = "Подтвердить";
-    makeAutoObservable(this, {}, { autoBind: true });
+    makeAutoObservable(this, { children: observable.ref }, { autoBind: true });
   }
 
   openModal(template?: string) {
@@ -35,7 +35,13 @@ export class ModalStore {
   }
 
   closeModal() {
+    console.log("closeModal");
     this.open = false;
+    this.children = undefined;
+  }
+
+  setChildren(children: React.ReactNode) {
+    this.children = children;
   }
 
   setTitle(title: string) {

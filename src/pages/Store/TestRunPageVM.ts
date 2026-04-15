@@ -1,10 +1,13 @@
-import { makeAutoObservable } from "mobx";
+import { makeAutoObservable, reaction } from "mobx";
+import { createElement } from "react";
 import type { RootStore } from "./rootstore/rootStore";
 import type { NavigateFunction } from "react-router-dom";
+import ChangePassForm from "../../components/ChangePassForm";
 
 export class TestRunPageVM {
-  confirmModal: boolean = false;
   rootStore: RootStore;
+  private changePassDisposer: (() => void) | null = null;
+
   constructor(rootStore: RootStore) {
     makeAutoObservable(this, {}, { autoBind: true });
     this.rootStore = rootStore;
@@ -28,4 +31,64 @@ export class TestRunPageVM {
   get store() {
     return this.rootStore.testRunStore;
   }
+
+  get modalStore() {
+    return this.rootStore.modalStore;
+  }
+
+  get changePassStore() {
+    return this.rootStore.changePassStore;
+  }
+
+  requestFinish(navigate: NavigateFunction) {
+    this.modalStore.setTitle(this.finishTitle);
+    this.modalStore.setCancelLabel("Отменить");
+    this.modalStore.setConfirmLabel("Завершить");
+    this.modalStore.setDisabled(false);
+    this.modalStore.openModal();
+    this.modalStore.setSubmit(() => {
+      console.log("submit");
+      this.modalStore.closeModal();
+      this.submit(navigate);
+    });
+    this.modalStore.setOnClose(() => {
+      console.log("close");
+      this.modalStore.closeModal();
+    });
+  }
+
+  requestChangePass() {
+    const cps = this.changePassStore;
+    cps.reset();
+
+    this.modalStore.setTitle("Сменить пароль");
+    this.modalStore.setCancelLabel("Отменить");
+    this.modalStore.setConfirmLabel("Подтвердить");
+    this.modalStore.setChildren(createElement(ChangePassForm, { store: cps }));
+
+    // React on formValid changes to keep the button disabled state in sync
+    this.changePassDisposer?.();
+    this.changePassDisposer = reaction(
+      () => cps.formValid,
+      (valid) => this.modalStore.setDisabled(!valid || cps.submitting),
+      { fireImmediately: true },
+    );
+
+    this.modalStore.setSubmit(() => {
+      cps.submit(() => {
+        this.changePassDisposer?.();
+        this.modalStore.closeModal();
+        console.log("Пароль успешно изменён");
+      });
+    });
+
+    this.modalStore.setOnClose(() => {
+      this.changePassDisposer?.();
+      cps.reset();
+      this.modalStore.closeModal();
+    });
+
+    this.modalStore.openModal();
+  }
 }
+
