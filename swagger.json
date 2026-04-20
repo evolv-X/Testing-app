@@ -1,0 +1,1219 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Testing Platform API (Student)",
+    "version": "v1"
+  },
+  "paths": {
+    "/api/Auth": {
+      "post": {
+        "tags": ["Auth"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/AuthRequest" }
+            },
+            "text/json": {
+              "schema": { "$ref": "#/components/schemas/AuthRequest" }
+            },
+            "application/*+json": {
+              "schema": { "$ref": "#/components/schemas/AuthRequest" }
+            }
+          }
+        },
+        "responses": {
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              },
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              },
+              "text/json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Auth/refresh": {
+      "post": {
+        "tags": ["Auth"],
+        "responses": {
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              },
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              },
+              "text/json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Auth/logout": {
+      "post": {
+        "tags": ["Auth"],
+        "responses": {
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              },
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              },
+              "text/json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/api/Tests/available": {
+      "get": {
+        "tags": ["Tests"],
+        "summary": "РџРѕР»СѓС‡РёС‚СЊ СЃРїРёСЃРѕРє С‚РµСЃС‚РѕРІ (РґР»СЏ СЃС‚СѓРґРµРЅС‚Р°)",
+        "parameters": [
+          {
+            "name": "isPublic",
+            "in": "query",
+            "description": "Р¤РёР»СЊС‚СЂ РїРѕ РїСѓР±Р»РёС‡РЅРѕСЃС‚Рё С‚РµСЃС‚Р°",
+            "schema": { "type": "boolean" }
+          },
+          {
+            "name": "searchTitle",
+            "in": "query",
+            "description": "РџРѕРёСЃРє РїРѕ РЅР°Р·РІР°РЅРёСЋ С‚РµСЃС‚Р°",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "description": "РџРѕР»Рµ РґР»СЏ СЃРѕСЂС‚РёСЂРѕРІРєРё (\"Title\" РёР»Рё \"PublishedAt\")",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "sortDescending",
+            "in": "query",
+            "description": "РќР°РїСЂР°РІР»РµРЅРёРµ СЃРѕСЂС‚РёСЂРѕРІРєРё (true вЂ” РїРѕ СѓР±С‹РІР°РЅРёСЋ)",
+            "schema": { "type": "boolean", "default": true }
+          },
+          {
+            "name": "pageNumber",
+            "in": "query",
+            "description": "РќРѕРјРµСЂ СЃС‚СЂР°РЅРёС†С‹ (РЅР°С‡РёРЅР°РµС‚СЃСЏ СЃ 1)",
+            "schema": { "type": "integer", "format": "int32", "default": 1 }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "Р Р°Р·РјРµСЂ СЃС‚СЂР°РЅРёС†С‹",
+            "schema": { "type": "integer", "format": "int32", "default": 10 }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              },
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              },
+              "text/json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              },
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              },
+              "text/json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/TestResponse" }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/TestResponse" }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/TestResponse" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Tests/{id}": {
+      "get": {
+        "tags": ["Tests"],
+        "summary": "РџРѕР»СѓС‡РёС‚СЊ С‚РµСЃС‚ РїРѕ id (РґР»СЏ СЃС‚СѓРґРµРЅС‚Р°)",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ С‚РµСЃС‚Р°",
+            "required": true,
+            "schema": { "type": "integer", "format": "int32" }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              },
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              },
+              "text/json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              },
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              },
+              "text/json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": { "$ref": "#/components/schemas/TestResponse" }
+              },
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/TestResponse" }
+              },
+              "text/json": {
+                "schema": { "$ref": "#/components/schemas/TestResponse" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              },
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              },
+              "text/json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/api/Question": {
+      "get": {
+        "tags": ["Question"],
+        "summary": "РџРѕР»СѓС‡РёС‚СЊ СЃРїРёСЃРѕРє РІРѕРїСЂРѕСЃРѕРІ",
+        "parameters": [
+          {
+            "name": "testId",
+            "in": "query",
+            "schema": { "type": "integer", "format": "int32" }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              },
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              },
+              "text/json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              },
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              },
+              "text/json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/QuestionResponse" }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/QuestionResponse" }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/QuestionResponse" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Question/{id}": {
+      "get": {
+        "tags": ["Question"],
+        "summary": "РџРѕР»СѓС‡РёС‚СЊ РІРѕРїСЂРѕСЃ РїРѕ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂСѓ",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ РІРѕРїСЂРѕСЃР°",
+            "required": true,
+            "schema": { "type": "integer", "format": "int32" }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              },
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              },
+              "text/json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              },
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              },
+              "text/json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": { "$ref": "#/components/schemas/QuestionResponse" }
+              },
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/QuestionResponse" }
+              },
+              "text/json": {
+                "schema": { "$ref": "#/components/schemas/QuestionResponse" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              },
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              },
+              "text/json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/api/Attempts": {
+      "post": {
+        "tags": ["Attempts"],
+        "summary": "РќР°С‡Р°С‚СЊ РїРѕРїС‹С‚РєСѓ",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CreateAttemptRequest" }
+            },
+            "text/json": {
+              "schema": { "$ref": "#/components/schemas/CreateAttemptRequest" }
+            },
+            "application/*+json": {
+              "schema": { "$ref": "#/components/schemas/CreateAttemptRequest" }
+            }
+          }
+        },
+        "responses": {
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              },
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              },
+              "text/json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              },
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              },
+              "text/json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              }
+            }
+          },
+          "201": { "description": "Created" },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              },
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              },
+              "text/json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              },
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              },
+              "text/json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Attempts"],
+        "summary": "Р—Р°РєРѕРЅС‡РёС‚СЊ РїРѕРїС‹С‚РєСѓ",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UpdateAttemptRequest" }
+            },
+            "text/json": {
+              "schema": { "$ref": "#/components/schemas/UpdateAttemptRequest" }
+            },
+            "application/*+json": {
+              "schema": { "$ref": "#/components/schemas/UpdateAttemptRequest" }
+            }
+          }
+        },
+        "responses": {
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              },
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              },
+              "text/json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              },
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              },
+              "text/json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              }
+            }
+          },
+          "201": { "description": "Created" },
+          "204": { "description": "No Content" },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              },
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              },
+              "text/json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Attempts/{attemptId}/review": {
+      "get": {
+        "tags": ["Attempts"],
+        "summary": "РџРѕР»СѓС‡РёС‚СЊ СЂР°Р·Р±РѕСЂ РїРѕРїС‹С‚РєРё",
+        "parameters": [
+          {
+            "name": "attemptId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int32" }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              },
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              },
+              "text/json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              },
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              },
+              "text/json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": { "$ref": "#/components/schemas/AttemptReviewDto" }
+              },
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/AttemptReviewDto" }
+              },
+              "text/json": {
+                "schema": { "$ref": "#/components/schemas/AttemptReviewDto" }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "text/plain": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              },
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              },
+              "text/json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              },
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              },
+              "text/json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/api/StudentAnswers": {
+      "post": {
+        "tags": ["StudentAnswers"],
+        "summary": "Р”Р°С‚СЊ РѕС‚РІРµС‚ РЅР° РІРѕРїСЂРѕСЃ",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateStudentAnswerRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateStudentAnswerRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateStudentAnswerRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              },
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              },
+              "text/json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              },
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              },
+              "text/json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              }
+            }
+          },
+          "200": { "description": "OK" },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              },
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              },
+              "text/json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              },
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              },
+              "text/json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/api/StudentTests/summary": {
+      "get": {
+        "tags": ["StudentTests"],
+        "summary": "РџРѕР»СѓС‡РёС‚СЊ СЃРІРѕРґРєСѓ РїРѕ РїРѕРїС‹С‚РєР°Рј РІСЃРµС… РґРѕСЃС‚СѓРїРЅС‹С… СЃС‚СѓРґРµРЅС‚Сѓ С‚РµСЃС‚РѕРІ",
+        "responses": {
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              },
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              },
+              "text/json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              },
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              },
+              "text/json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/StudentTestSummaryDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/StudentTestSummaryDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/StudentTestSummaryDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/api/TestResults/student": {
+      "get": {
+        "tags": ["TestResults"],
+        "summary": "РџРѕР»СѓС‡РёС‚СЊ СЂРµР·СѓР»СЊС‚Р°С‚С‹ СЃС‚СѓРґРµРЅС‚Р°",
+        "description": "РџРѕСЃР»Рµ РґРѕР±Р°РІР»РµРЅРёСЏ Р°РІС‚РѕСЂРёР·Р°С†РёРё РїРѕР»СѓС‡РµРЅРёРµ id С‡РµСЂРµР· РїР°СЂР°РјРµС‚СЂС‹ Р±СѓРґРµС‚ СѓРґР°Р»РµРЅРѕ",
+        "responses": {
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              },
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              },
+              "text/json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              },
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              },
+              "text/json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": { "$ref": "#/components/schemas/TestResultDto" }
+              },
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/TestResultDto" }
+              },
+              "text/json": {
+                "schema": { "$ref": "#/components/schemas/TestResultDto" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/TestResults/test/{testId}": {
+      "get": {
+        "tags": ["TestResults"],
+        "summary": "РџРѕР»СѓС‡РёС‚СЊ СЂРµР·СѓР»СЊС‚Р°С‚ С‚РµСЃС‚Р° РґР»СЏ С‚РµРєСѓС‰РµРіРѕ СЃС‚СѓРґРµРЅС‚Р°",
+        "description": "РџРѕР·РІРѕР»СЏРµС‚ РїРѕР»СѓС‡РёС‚СЊ РґРµС‚Р°Р»СЊРЅСѓСЋ РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ СЂРµР·СѓР»СЊС‚Р°С‚Р°С… РїСЂРѕС…РѕР¶РґРµРЅРёСЏ РєРѕРЅРєСЂРµС‚РЅРѕРіРѕ С‚РµСЃС‚Р°",
+        "parameters": [
+          {
+            "name": "testId",
+            "in": "path",
+            "description": "РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ С‚РµСЃС‚Р°",
+            "required": true,
+            "schema": { "type": "integer", "format": "int32" }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              },
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              },
+              "text/json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              },
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              },
+              "text/json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetails" }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/TestResultDetailResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TestResultDetailResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TestResultDetailResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AuthRequest": {
+        "required": ["login", "password"],
+        "type": "object",
+        "properties": {
+          "login": { "minLength": 1, "type": "string" },
+          "password": { "minLength": 1, "type": "string" }
+        },
+        "additionalProperties": false
+      },
+      "ProblemDetails": {
+        "type": "object",
+        "properties": {
+          "type": { "type": "string", "nullable": true },
+          "title": { "type": "string", "nullable": true },
+          "status": { "type": "integer", "format": "int32", "nullable": true },
+          "detail": { "type": "string", "nullable": true },
+          "instance": { "type": "string", "nullable": true }
+        },
+        "additionalProperties": {}
+      },
+
+      "CreateAttemptRequest": {
+        "type": "object",
+        "properties": {
+          "testId": {
+            "type": "integer",
+            "description": "РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ С‚РµСЃС‚Р°",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false,
+        "description": "РњРѕРґРµР»СЊ РЅР°С‡Р°Р»Р° РїРѕРїС‹С‚РєРё"
+      },
+      "UpdateAttemptRequest": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "РРґРµРЅС‚С„РёРєР°С‚РѕСЂ РїРѕРїС‹С‚РєРё",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+
+      "AttemptReviewDto": {
+        "type": "object",
+        "properties": {
+          "attemptId": { "type": "integer", "format": "int32" },
+          "testId": { "type": "integer", "format": "int32" },
+          "score": { "type": "integer", "format": "int32" },
+          "maxScore": { "type": "integer", "format": "int32" },
+          "canShowReview": { "type": "boolean" },
+          "items": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/AttemptReviewItemDto" },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "AttemptReviewItemDto": {
+        "type": "object",
+        "properties": {
+          "questionId": { "type": "integer", "format": "int32" },
+          "answerType": { "type": "integer", "format": "int32" },
+          "maxScore": { "type": "integer", "format": "int32" },
+          "earned": { "type": "integer", "format": "int32" },
+          "correctAnswerIds": {
+            "type": "array",
+            "items": { "type": "integer", "format": "int32" },
+            "nullable": true
+          },
+          "selectedAnswerIds": {
+            "type": "array",
+            "items": { "type": "integer", "format": "int32" },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+
+      "CreateStudentAnswerRequest": {
+        "type": "object",
+        "properties": {
+          "attemptId": {
+            "type": "integer",
+            "description": "Рљ РєР°РєРѕР№ РїРѕРїС‹С‚РєРµ РїСЂРёРІСЏР·Р°РЅ РІС‹Р±РѕСЂ",
+            "format": "int32"
+          },
+          "questionId": {
+            "type": "integer",
+            "description": "РќР° РєР°РєРѕР№ РІРѕРїСЂРѕСЃ РґР°РЅ РѕС‚РІРµС‚",
+            "format": "int32"
+          },
+          "userSelectedOptions": {
+            "type": "array",
+            "items": { "type": "integer", "format": "int32" },
+            "description": "РљР°РєРёРµ Р±С‹Р»Рё РІС‹Р±СЂР°РЅС‹ РІР°СЂРёР°РЅС‚С‹ РѕС‚РІРµС‚РѕРІ (РёР»Рё РѕРґРёРЅ РІ СЃР»СѓС‡Р°Рµ СЃ РµРґРёРЅРёС‡РЅС‹Рј РІС‹Р±РѕСЂРѕРј)",
+            "nullable": true
+          },
+          "userTextAnswers": {
+            "type": "string",
+            "description": "Р•СЃР»Рё РІРѕРїСЂРѕСЃ Р±С‹Р» С‚РµРєСЃС‚РѕРІС‹Р№, С‚Рѕ Р·РґРµСЃСЊ С…СЂР°РЅРёРј С‚РµРєСЃС‚РѕРІС‹Р№ РѕС‚РІРµС‚",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+
+      "AnswerType": {
+        "enum": [1, 2, 3],
+        "type": "integer",
+        "format": "int32"
+      },
+      "AnswerResponseForStudent": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ",
+            "format": "int32"
+          },
+          "text": {
+            "type": "string",
+            "description": "РўРµРєСЃС‚ РѕС‚РІРµС‚Р°",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "QuestionResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ",
+            "format": "int32"
+          },
+          "text": {
+            "type": "string",
+            "description": "РўРµСЃС‚ РІРѕРїСЂРѕСЃР°",
+            "nullable": true
+          },
+          "number": {
+            "type": "integer",
+            "description": "РќРѕРјРµСЂ РІРѕРїСЂРѕСЃР° РІ С‚РµСЃС‚Рµ",
+            "format": "int32"
+          },
+          "description": {
+            "type": "string",
+            "description": "РћРїРёСЃР°РЅРёРµ РІРѕРїСЂРѕСЃР°",
+            "nullable": true
+          },
+          "answerType": { "$ref": "#/components/schemas/AnswerType" },
+          "isScoring": {
+            "type": "boolean",
+            "description": "РћС†РµРЅРёРІР°РµС‚СЃСЏ Р»Рё С‚РµСЃС‚"
+          },
+          "maxScore": {
+            "type": "integer",
+            "description": "РЎРєРѕР»СЊРєРѕ Р±Р°Р»Р»РѕРІ РјРѕР¶РЅРѕ РїРѕР»СѓС‡РёС‚СЊ Р·Р° РІРѕРїСЂРѕСЃ",
+            "format": "int32"
+          },
+          "answers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AnswerResponseForStudent"
+            },
+            "description": "РЎРїРёСЃРѕРє РѕС‚РІРµС‚РѕРІ",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Р’РѕРїСЂРѕСЃ"
+      },
+
+      "StudentTestSummaryDto": {
+        "type": "object",
+        "properties": {
+          "testId": { "type": "integer", "format": "int32" },
+          "maxAttempts": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "attemptsUsed": { "type": "integer", "format": "int32" },
+          "attemptsLeft": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "hasActiveAttempt": { "type": "boolean" },
+          "activeAttemptId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "hasGradedAttempt": { "type": "boolean" },
+          "bestScore": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+
+      "TestType": {
+        "enum": [1, 2, 3],
+        "type": "integer",
+        "format": "int32"
+      },
+      "TestResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ",
+            "format": "int32"
+          },
+          "title": {
+            "type": "string",
+            "description": "РќР°Р·РІР°РЅРёРµ",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "description": "РћРїРёСЃР°РЅРёРµ",
+            "nullable": true
+          },
+          "isRepeatable": {
+            "type": "boolean",
+            "description": "РњРѕР¶РЅРѕ Р»Рё РїСЂРѕР№С‚Рё С‚РµСЃС‚ Р±РѕР»СЊС€Рµ РѕРґРЅРѕРіРѕ СЂР°Р·Р°"
+          },
+          "type": { "$ref": "#/components/schemas/TestType" },
+          "isPublic": {
+            "type": "boolean",
+            "description": "РћРїСѓР±Р»РёРєРѕРІР°РЅ Р»Рё РґР»СЏ СЃС‚СѓРґРµРЅС‚РѕРІ"
+          },
+          "createdAt": {
+            "type": "string",
+            "description": "Р”Р°С‚Р° СЃРѕР·РґР°РЅРёСЏ",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false,
+        "description": "РљСЂР°С‚РєР°СЏ РјРѕРґРµР»СЊ С‚РµСЃС‚Р°"
+      },
+
+      "TestResultDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "format": "int32" },
+          "passed": { "type": "boolean" },
+          "testId": { "type": "integer", "format": "int32" },
+          "attemptId": { "type": "integer", "format": "int32" },
+          "bestScore": { "type": "integer", "format": "int32" },
+          "studentId": { "type": "integer", "format": "int32" }
+        },
+        "additionalProperties": false
+      },
+      "TestResultDetailResponse": {
+        "type": "object",
+        "properties": {
+          "testId": {
+            "type": "integer",
+            "description": "РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ С‚РµСЃС‚Р°",
+            "format": "int32"
+          },
+          "hasAnyAttempt": {
+            "type": "boolean",
+            "description": "Р•СЃС‚СЊ Р»Рё С…РѕС‚СЏ Р±С‹ РѕРґРЅР° РїРѕРїС‹С‚РєР°"
+          },
+          "bestAttemptId": {
+            "type": "integer",
+            "description": "ID Р»СѓС‡С€РµР№ РїРѕРїС‹С‚РєРё",
+            "format": "int32",
+            "nullable": true
+          },
+          "bestScore": {
+            "type": "integer",
+            "description": "Р›СѓС‡С€РёР№ Р±Р°Р»Р»",
+            "format": "int32",
+            "nullable": true
+          },
+          "maxScore": {
+            "type": "integer",
+            "description": "РњР°РєСЃРёРјР°Р»СЊРЅС‹Р№ Р±Р°Р»Р» Р·Р° С‚РµСЃС‚",
+            "format": "int32"
+          },
+          "passed": {
+            "type": "boolean",
+            "description": "РџСЂРѕР№РґРµРЅ Р»Рё С‚РµСЃС‚"
+          },
+          "attemptsUsed": {
+            "type": "integer",
+            "description": "РСЃРїРѕР»СЊР·РѕРІР°РЅРѕ РїРѕРїС‹С‚РѕРє",
+            "format": "int32"
+          },
+          "attemptsLeft": {
+            "type": "integer",
+            "description": "РћСЃС‚Р°Р»РѕСЃСЊ РїРѕРїС‹С‚РѕРє",
+            "format": "int32",
+            "nullable": true
+          },
+          "canShowReview": {
+            "type": "boolean",
+            "description": "РњРѕР¶РЅРѕ Р»Рё РїРѕРєР°Р·С‹РІР°С‚СЊ СЂР°Р·Р±РѕСЂ"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Р”РµС‚Р°Р»СЊРЅС‹Р№ СЂРµР·СѓР»СЊС‚Р°С‚ С‚РµСЃС‚Р° РґР»СЏ СЃС‚СѓРґРµРЅС‚Р°"
+      }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "description": "JWT Authorization header using the Bearer scheme.",
+        "scheme": "Bearer"
+      }
+    }
+  },
+  "security": [{ "Bearer": [] }]
+}

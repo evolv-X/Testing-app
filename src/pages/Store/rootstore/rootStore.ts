@@ -4,6 +4,7 @@ import { TestRunStore } from "../tests/testRunStore";
 import { TestRunPageVM } from "../TestRunPageVM";
 import { ModalStore } from "../modal/modalStore";
 import { ChangePassStore } from "../changePassStore";
+import { authStore, AuthStore } from "../../../store/authStore";
 
 export class RootStore {
   counterStore: Counter;
@@ -12,6 +13,7 @@ export class RootStore {
   testRunPageVM: TestRunPageVM;
   modalStore: ModalStore;
   changePassStore: ChangePassStore;
+  authStore: AuthStore;
 
   constructor() {
     this.counterStore = new Counter();
@@ -20,6 +22,7 @@ export class RootStore {
     this.testRunPageVM = new TestRunPageVM(this);
     this.modalStore = new ModalStore();
     this.changePassStore = new ChangePassStore();
+    this.authStore = authStore;
   }
 }
 

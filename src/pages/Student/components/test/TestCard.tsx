@@ -6,7 +6,6 @@ import {
   TimerIcon /*, RetryIcon*/,
 } from "../../../../icons/icons";
 import { ScoreFlag } from "./../ScoreFlag";
-import { useNavigate } from "react-router-dom";
 
 const Card = styled.article`
   padding: 34px 16px 15px 22px;
@@ -177,22 +176,15 @@ function formatSecondsToMinutes(seconds?: number | null): string | null {
 type TestCardProps = {
   test: TestResult;
   lastAttempt?: Attempt;
+  onStart: () => void;
 };
 
 export function TestCard(props: TestCardProps) {
-  const { test, lastAttempt } = props;
-  const navigate = useNavigate();
+  const { test, lastAttempt, onStart } = props;
   console.log(lastAttempt);
 
   const scoreText =
     lastAttempt?.status === "graded" ? lastAttempt!.score / 10 : null;
-
-  function handleClick() {
-    // if (btnText.name === "done") return;
-    navigate(`/student/tests/${test.id}`, {
-      state: { durationSec: test.durationSec },
-    });
-  }
 
   return (
     <Card>
@@ -229,7 +221,7 @@ export function TestCard(props: TestCardProps) {
           Можно пройти заново
         </Retry>
       </CardInfo>
-      <StartButton type="button" onClick={handleClick}>Пройти заново</StartButton>
+      <StartButton type="button" onClick={onStart}>Пройти заново</StartButton>
     </Card>
   );
 }

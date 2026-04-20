@@ -1,8 +1,9 @@
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { ProfileIcon, StatsIcon, TestsIcon } from "../icons/icons";
 
 import styled from '@emotion/styled';
-
+import { useStore } from "../pages/Store/useStore";
+import { observer } from "mobx-react-lite";
 
 const Wrapper = styled.div`
     display: grid;
@@ -14,6 +15,9 @@ const Aside = styled.aside`
     border-radius: ${p => p.theme.radius.md};
     background-color: #fff;
     padding: 30px 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 `;
 
 const Main = styled.main`
@@ -46,8 +50,33 @@ const Item = styled(NavLink)`
     }
 `;
 
+const LogoutButton = styled.button`
+    padding: 10px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    border: none;
+    background: transparent;
+    color: #ff4d4f;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 10px;
+    font-size: 16px;
+    font-family: inherit;
 
-export function StudentLayout() {
+    &:hover {
+        background-color: #fff1f0;
+    }
+`;
+
+export const StudentLayout = observer(() => {
+    const { authStore } = useStore();
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        authStore.logout();
+    };
+
     return (
         <Wrapper>
             <Aside>
@@ -76,10 +105,13 @@ export function StudentLayout() {
                         Профиль
                     </Item>
                 </Nav>
+                <LogoutButton onClick={handleLogout}>
+                    🛡 Выйти
+                </LogoutButton>
             </Aside>
             <Main>
                 <Outlet />
             </Main>
         </Wrapper>
     );
-}
+});

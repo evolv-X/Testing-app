@@ -11,6 +11,7 @@ import { AdminLayout } from "../layouts/AdminLayout";
 import { StudentProfilePage } from "../components/StudentProfilePage";
 import { StudentResultPage } from "../pages/Student/StudentResultPage";
 import { StudentStatistic } from "../pages/Student/StudentStatistic";
+import { ProtectedRoute } from "./ProtectedRoute";
 
 export const router = createBrowserRouter([
   {
@@ -18,15 +19,20 @@ export const router = createBrowserRouter([
     element: <AppLayout />,
     children: [
       {
-        path: "student",
-        element: <StudentLayout />,
+        element: <ProtectedRoute />,
         children: [
-          { index: true, element: <StudentPage /> },
-          { path: "tests", element: <StudentTestPage /> },
-          { path: "tests/:id", element: <StudentRunTests /> },
-          { path: "tests/:id/result", element: <StudentResultPage /> },
-          { path: "statistics", element: <StudentStatistic /> },
-          { path: "profile", element: <StudentProfilePage /> },
+          {
+            path: "student",
+            element: <StudentLayout />,
+            children: [
+              { index: true, element: <StudentPage /> },
+              { path: "tests", element: <StudentTestPage /> },
+              { path: "tests/:id", element: <StudentRunTests /> },
+              { path: "tests/:id/result", element: <StudentResultPage /> },
+              { path: "statistics", element: <StudentStatistic /> },
+              { path: "profile", element: <StudentProfilePage /> },
+            ],
+          },
         ],
       },
       { path: "login", element: <LoginPage /> },
