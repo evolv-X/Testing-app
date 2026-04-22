@@ -4,18 +4,7 @@ import { Toast } from "./ui/Toast";
 import { useStore } from "../pages/Store/useStore";
 import { useParams } from "react-router-dom";
 
-type GroupLearning = { group: string; course: string; direction: string };
 
-type ProfileData = {
-  fullName: string;
-  achivment: string;
-  avatarUrl: string;
-  social: {
-    url: string;
-    label: string;
-  };
-  learning: GroupLearning[];
-};
 
 const ProfileWrapper = styled.div`
   display: flex;

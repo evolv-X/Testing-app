@@ -104,7 +104,7 @@ const EyeIcon = ({ open, onClick }: EyeIconProps) => (
 type PasswordInputProps = {
   label: string;
   value: string;
-  onChange: React.Dispatch<React.SetStateAction<string>>;
+  onChange: (value: string) => void;
 };
 
 export function PasswordInput({ label, onChange, value }: PasswordInputProps) {

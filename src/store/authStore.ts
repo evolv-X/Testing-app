@@ -1,6 +1,6 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import { tokenStorage } from "../shared/auth/tokenStorage";
-import { apiClient } from "../api/apiClient";
+
 import type { AuthRequest } from "../api/data-contracts";
 
 export class AuthStore {
@@ -29,7 +29,7 @@ export class AuthStore {
     this.isAuthorized = value;
   }
 
-  async login(data: AuthRequest, rememberMe: boolean = false) {
+  async login(_data: AuthRequest, rememberMe: boolean = false) {
     this.isLoading = true;
     this.error = null;
 

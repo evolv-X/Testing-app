@@ -4,6 +4,7 @@ import react from '@vitejs/plugin-react'
 // https://vite.dev/config/
 console.log('=== VITE CONFIG TS IS LOADED ===');
 export default defineConfig({
+  base: '/Testing-app/',
   plugins: [
     react({
       babel: {

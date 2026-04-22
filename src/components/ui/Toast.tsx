@@ -48,7 +48,7 @@ export function Toast({
   message,
   onClose,
   duration = 3000,
-  type,
+  type: _type,
 }: ToastProps) {
   useEffect(() => {
     if (!open) return;
