@@ -1,4 +1,5 @@
 import { makeAutoObservable, runInAction } from "mobx";
+import { apiClient } from "../api/apiClient";
 import { tokenStorage } from "../shared/auth/tokenStorage";
 
 import type { AuthRequest } from "../api/data-contracts";
@@ -29,7 +30,7 @@ export class AuthStore {
     this.isAuthorized = value;
   }
 
-  async login(_data: AuthRequest, rememberMe: boolean = false) {
+  async login(data: AuthRequest, rememberMe: boolean = false) {
     this.isLoading = true;
     this.error = null;
 
@@ -38,34 +39,40 @@ export class AuthStore {
 
       // --- ВРЕМЕННАЯ ЗАГЛУШКА ДЛЯ РАЗРАБОТКИ ---
       // Имитируем задержку сети
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      // await new Promise((resolve) => setTimeout(resolve, 500));
 
-      // Генерируем фейковый токен
-      const fakeToken = "dummy-token-for-dev";
+      // // Генерируем фейковый токен
+      // const fakeToken = "dummy-token-for-dev";
 
-      runInAction(() => {
-        tokenStorage.setAccess(fakeToken);
-        this.isAuthorized = true;
-      });
+      // runInAction(() => {
+      //   tokenStorage.setAccess(fakeToken);
+      //   this.isAuthorized = true;
+      // });
 
-      /* 
       // ОРИГИНАЛЬНЫЙ КОД ДЛЯ РЕАЛЬНОГО БЭКЕНДА:
       const response = await apiClient.auth.authCreate(data);
 
+      console.log(response);
+
       // Шаг 8.4. Извлекаем токен из ответа
       const responseData = response.data as any;
-      const accessToken = responseData.accessToken || responseData.token || (typeof responseData === "string" ? responseData : null);
+      const accessToken =
+        responseData.accessToken ||
+        responseData.token ||
+        (typeof responseData === "string" ? responseData : null);
 
       if (!accessToken) {
-        throw new Error("Сервер не вернул токен. Проверьте правильность логина и пароля.");
+        throw new Error(
+          "Сервер не вернул токен. Проверьте правильность логина и пароля.",
+        );
       }
 
       runInAction(() => {
         // Шаг 8.5. Сохраняем токен
         tokenStorage.setAccess(accessToken);
         // Шаг 8.6. Изменяем статус
+        this.isAuthorized = true;
       });
-      */
     } catch (e: any) {
       tokenStorage.clear();
 
