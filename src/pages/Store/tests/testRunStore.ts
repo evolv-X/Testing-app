@@ -83,7 +83,6 @@ export class TestRunStore {
       });
   }
 
-
   async start(testId: number) {
     this.reset();
     this.testId = testId;
@@ -103,7 +102,6 @@ export class TestRunStore {
   async load() {
     this.uiStateLoading.isLoading = true;
     this.uiStateLoading.error = "";
-    // console.log("НАЧАЛО ЗАГРУЗКИ");
 
     try {
       const [testsRes, attemptsRes, questionsRes] = await Promise.all([
@@ -137,7 +135,8 @@ export class TestRunStore {
       });
     } catch (e: any) {
       runInAction(() => {
-        this.uiStateLoading.error = e instanceof Error ? e.message : "Ошибка загрузки";
+        this.uiStateLoading.error =
+          e instanceof Error ? e.message : "Ошибка загрузки";
         this.uiStateLoading.isLoading = false;
       });
     }
