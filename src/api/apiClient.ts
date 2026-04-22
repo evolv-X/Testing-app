@@ -11,8 +11,12 @@ import { Groups } from './Groups';
 import { Students } from './Students';
 import { tokenStorage } from '../shared/auth/tokenStorage';
 
+const BASE_URL = import.meta.env.DEV
+  ? ''  // в dev-режиме работает Vite proxy
+  : 'http://62c8d468f852.vps.myjino.ru:49195';
+
 export const axiosInstance = axios.create({
-  // Укажите baseURL при необходимости, например: import.meta.env.VITE_API_URL
+  baseURL: BASE_URL,
 });
 
 // Добавляем токен ко всем запросам
