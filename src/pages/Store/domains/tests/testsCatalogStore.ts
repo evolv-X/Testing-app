@@ -49,8 +49,8 @@ export class TestsCatalogStore {
 
     try {
       const [testsRes, attemptsRes] = await Promise.all([
-        fetch("/data/tests.json"),
-        fetch("/data/attempts.json"),
+        fetch("/Testing-app/data/tests.json"),
+        fetch("/Testing-app/data/attempts.json"),
       ]);
 
       if (!testsRes.ok || !attemptsRes.ok) {
