@@ -110,7 +110,6 @@ export function Modal(props: ModalProps) {
 
   if (!open) return null;
 
-  console.log(open);
   return (
     <Overlay onClick={() => onClose(false)}>
       <ModalContainer onClick={(e) => e.stopPropagation()}>

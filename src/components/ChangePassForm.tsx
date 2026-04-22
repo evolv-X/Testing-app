@@ -25,13 +25,11 @@ const ChangePassForm = observer(({ store }: ChangePassFormProps) => {
       <ChildContainer>
         <PasswordInput
           label="Новый пароль"
-          type="password"
           onChange={(v) => store.setPw1(v)}
           value={store.pw1}
         />
         <PasswordInput
           label="Повторите пароль"
-          type="password"
           onChange={(v) => store.setPw2(v)}
           value={store.pw2}
         />

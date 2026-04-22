@@ -46,11 +46,8 @@ export default function ChangeModalPass(props: ChangeModalPassProps) {
   }
 
   const pwErr = validatePassword(pw1);
-  // console.log(pwErr);
-  // const  проверка на одинаковость паролей инпута
   const matchErr = pw1 && pw2 && pw1 === pw2 ? "" : "Пароли не совпадают";
   const formValid = pw1 !== "" && pw2 !== "" && pwErr.length === 0 && !matchErr;
-  // console.log(formValid);
 
   function sendPassword(newPw: string) {
     return new Promise<void>((resolve, reject) => {
@@ -65,8 +62,6 @@ export default function ChangeModalPass(props: ChangeModalPassProps) {
   }
 
   async function onSubmit() {
-    console.log("нажали");
-    console.log(formValid);
 
     if (!formValid) return;
 
@@ -75,7 +70,6 @@ export default function ChangeModalPass(props: ChangeModalPassProps) {
       setSubmitting(true);
       onClose(false);
       onSuccess();
-      console.log("tcnm");
     } catch (error: any) {
       setServerErr(error?.message);
     } finally {
@@ -106,20 +100,18 @@ export default function ChangeModalPass(props: ChangeModalPassProps) {
       <ChildContainer>
         <PasswordInput
           label="Новый пароль"
-          type="password"
           onChange={setPw1}
           value={pw1}
         />
         <PasswordInput
           label="Повторите пароль"
-          type="password"
           onChange={setPw2}
           value={pw2}
         />
       </ChildContainer>
-      <TextError style={{ color: "red" }}>{pwErr.join(`\n`)}</TextError>
-      <TextError style={{ color: "red" }}>{matchErr}</TextError>
-      <TextError style={{ color: "red" }}>{serverErr}</TextError>
+      <TextError>{pwErr.join(`\n`)}</TextError>
+      <TextError>{matchErr}</TextError>
+      <TextError>{serverErr}</TextError>
     </Modal>
   );
 }

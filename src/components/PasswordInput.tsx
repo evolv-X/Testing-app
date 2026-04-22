@@ -103,12 +103,11 @@ const EyeIcon = ({ open, onClick }: EyeIconProps) => (
 
 type PasswordInputProps = {
   label: string;
-  type: string;
   value: string;
   onChange: React.Dispatch<React.SetStateAction<string>>;
 };
 
-export function PasswordInput({ label, type, onChange, value }: PasswordInputProps) {
+export function PasswordInput({ label, onChange, value }: PasswordInputProps) {
   const [show, setShow] = useState(false);
 
   return (
@@ -117,7 +116,7 @@ export function PasswordInput({ label, type, onChange, value }: PasswordInputPro
 
       <InputWrapper>
         <Input
-          type={show ? "text" : type}
+          type={show ? "text" : "password"}
           onChange={(e) => onChange(e.target.value)}
           value={value}
         />

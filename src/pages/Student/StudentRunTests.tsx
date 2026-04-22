@@ -1,11 +1,10 @@
 import styled from "@emotion/styled";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import QuestionBlock from "./components/test/QuestionBlock";
 import TimerBox from "./components/ui/TimerBox";
 import { useNavigate, useParams } from "react-router-dom";
 import { useStore } from "../Store/useStore";
 import { observer } from "mobx-react-lite";
-import { Modal } from "../../components/Modal";
 
 const Layout = styled.div``;
 

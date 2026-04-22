@@ -6,7 +6,7 @@ export function AdminPage() {
   return (
     <div>
       <h1>Admin page</h1>
-      <p>{data.state.some}</p>
+      <p>{data.state?.some}</p>
     </div>
   );
 }

@@ -124,11 +124,6 @@ export function StudentProfilePage() {
 
   const [isOpenToast, setIsOpenToast] = useState(false);
 
-  // function handleChangePass() {
-  //   console.log("click chng pass");
-  //   setIsOpenModal(true);
-  // }
-
   return (
     <ProfileWrapper>
       <Avatar
@@ -161,7 +156,7 @@ export function StudentProfilePage() {
       </Info>
       <Toast
         open={isOpenToast}
-        message="sucksess"
+        message="success"
         type="info"
         onClose={() => setIsOpenToast(false)}
       ></Toast>

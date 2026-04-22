@@ -6,7 +6,6 @@ export const StudentStatistic = observer(() => {
   // const counter = useMemo(() => new Counter(), []);
   const { value, increment, decrement, reset } = useStore().counterStore;
   const { modalStore } = useStore();
-  console.log(value);
 
   return (
     <div>
@@ -19,7 +18,6 @@ export const StudentStatistic = observer(() => {
         onClick={() => {
           modalStore.setTitle("Пример модалки из стора");
           modalStore.setSubmit(() => {
-            console.log("Подтверждено в статистике студента");
             modalStore.closeModal();
           });
           modalStore.openModal();

@@ -47,12 +47,10 @@ export class TestRunPageVM {
     this.modalStore.setDisabled(false);
     this.modalStore.openModal();
     this.modalStore.setSubmit(() => {
-      console.log("submit");
       this.modalStore.closeModal();
       this.submit(navigate);
     });
     this.modalStore.setOnClose(() => {
-      console.log("close");
       this.modalStore.closeModal();
     });
   }
@@ -78,7 +76,6 @@ export class TestRunPageVM {
       cps.submit(() => {
         this.changePassDisposer?.();
         this.modalStore.closeModal();
-        console.log("Пароль успешно изменён");
       });
     });
 

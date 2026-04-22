@@ -18,7 +18,6 @@ export function NavMenu() {
       <NavLink
         className={({ isActive }) => (isActive ? "active" : "")}
         to="/admin"
-        state={{ some: "value", filter: "compleated", a: "bbb" }}
       >
         Админ
       </NavLink>

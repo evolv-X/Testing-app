@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { ProfileIcon } from "../../icons/icons";
 import styled from "@emotion/styled";
 
@@ -11,7 +11,6 @@ const Notice = styled.div`
   padding: 15px 10px;
   background-color: #d7edff;
   border-radius: 15px;
-  display: flex;
   gap: 10px;
   align-items: center;
   color: #0e73f6;
@@ -25,11 +24,15 @@ const Content = styled.div`
   align-items: center;
 `;
 
-const Close = styled.div`
+const Close = styled.button`
   position: absolute;
   top: 8.67px;
   right: 8.67px;
   cursor: pointer;
+  background: none;
+  border: none;
+  color: inherit;
+  font-size: 14px;
 `;
 
 type ToastProps = {
@@ -63,7 +66,7 @@ export function Toast({
         <ProfileIcon />
         <p>{message}</p>
       </Content>
-      <Close aria-label="Close">X</Close>
+      <Close aria-label="Close" onClick={onClose}>✕</Close>
     </Notice>
   );
 }

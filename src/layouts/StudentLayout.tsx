@@ -1,4 +1,4 @@
-import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import { NavLink, Outlet } from "react-router-dom";
 import { ProfileIcon, StatsIcon, TestsIcon } from "../icons/icons";
 
 import styled from '@emotion/styled';
@@ -71,7 +71,6 @@ const LogoutButton = styled.button`
 
 export const StudentLayout = observer(() => {
     const { authStore } = useStore();
-    const navigate = useNavigate();
 
     const handleLogout = () => {
         authStore.logout();

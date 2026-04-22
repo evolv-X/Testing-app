@@ -14,12 +14,7 @@ export class AuthStore {
   }
 
   checkSession() {
-    const token = tokenStorage.getAccess();
-    if (token) {
-      this.isAuthorized = true;
-    } else {
-      this.isAuthorized = false;
-    }
+    this.isAuthorized = !!tokenStorage.getAccess();
   }
 
   setLoading(value: boolean) {
@@ -34,13 +29,11 @@ export class AuthStore {
     this.isAuthorized = value;
   }
 
-  // Шаг 8. Реализация метода login
   async login(data: AuthRequest, rememberMe: boolean = false) {
     this.isLoading = true;
     this.error = null;
 
     try {
-      // Шаг 8.2. Сохраняем флаг
       tokenStorage.setRemember(rememberMe);
 
       // --- ВРЕМЕННАЯ ЗАГЛУШКА ДЛЯ РАЗРАБОТКИ ---
@@ -74,12 +67,10 @@ export class AuthStore {
       });
       */
     } catch (e: any) {
-      // Шаг 8.7. Обработка ошибки
       tokenStorage.clear();
 
       runInAction(() => {
         this.isAuthorized = false;
-        // Пытаемся вытащить сообщение об ошибке, если оно есть
         if (e.response && e.response.data) {
           const data = e.response.data;
           const detail = data.message || data.detail || data.title;
@@ -89,16 +80,13 @@ export class AuthStore {
         }
       });
     } finally {
-      // Шаг 8.8. Завершение загрузки
       runInAction(() => {
         this.isLoading = false;
       });
     }
   }
 
-  // Шаг 9. Реализуем logout
   logout() {
-    // Задача: Очистить токен и сбросить флаг авторизации.
     tokenStorage.clear();
     this.isAuthorized = false;
     this.error = null;

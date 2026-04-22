@@ -35,7 +35,6 @@ export class ModalStore {
   }
 
   closeModal() {
-    console.log("closeModal");
     this.open = false;
     this.children = undefined;
   }

@@ -30,12 +30,10 @@ export class TestRunStore {
   }
 
   setTimeLeftSec(timeLeftSec: number | null) {
-    console.log(2, timeLeftSec);
     if (timeLeftSec === null) {
       return;
     }
     this.uiStateLoading.remainingTime = timeLeftSec;
-    // console.log(this.uiStateLoading.remainingTime);
   }
 
   set showResult(showResult: boolean) {
@@ -47,9 +45,7 @@ export class TestRunStore {
   }
 
   setAnswer(questionId: number, value: string | string[]) {
-    console.log(questionId, value);
     this.answers[questionId] = value;
-    console.log(this.answers);
   }
 
   reset() {
@@ -87,25 +83,17 @@ export class TestRunStore {
       });
   }
 
-  //   async start() {
-  //     this.uiStateLoading.isLoading = true;
-  //     this.uiStateLoading.error = "";
-  //     this.uiStateLoading.finished = false;
-  //   }
 
   async start(testId: number) {
     this.reset();
     this.testId = testId;
     this.uiStateLoading.isLoading = true;
     await this.load();
-    // console.log(this.tests);
     const testFound = this.tests.find((t) => t.id === testId);
-    // console.log(testFound);
     runInAction(() => {
       this.questions = this.filtredQuestions;
       this.test = testFound;
       if (testFound) {
-        console.log(1, testFound.durationSec);
         this.setTimeLeftSec(testFound.durationSec);
       }
       this.uiStateLoading.isLoading = false;
@@ -134,9 +122,6 @@ export class TestRunStore {
         questionsRes.json(),
       ]);
 
-      // console.log("ДАННЫЕ ПОЛУЧЕНЫ", testsRes, attemptsRes, questionsRes);
-      // console.log("ДАННЫЕ JSON", testsData, attemptsData, questionsData);
-
       if (
         !Array.isArray(testsData) ||
         !Array.isArray(attemptsData) ||
@@ -147,17 +132,12 @@ export class TestRunStore {
 
       runInAction(() => {
         this.tests = testsData;
-        // console.log("ДАННЫЕ", this.tests);
         this.attempts = attemptsData;
-        // console.log("ДАННЫЕ", this.attempts);
         this.questions = questionsData;
       });
     } catch (e: any) {
-      this.uiStateLoading.error =
-        e instanceof Error ? e.message : "Ошибка загрузки";
-      // console.log(e);
       runInAction(() => {
-        this.uiStateLoading.error = e.message;
+        this.uiStateLoading.error = e instanceof Error ? e.message : "Ошибка загрузки";
         this.uiStateLoading.isLoading = false;
       });
     }
@@ -180,7 +160,6 @@ export class TestRunStore {
     this.evaluateResults();
 
     if (this.test && this.test.attemptsAllowed > 1 && this.test.allowRetry) {
-      console.log(this.durationSec);
       navigate(`/student/tests/${this.testId}/result`, {
         replace: true,
         state: {

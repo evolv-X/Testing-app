@@ -59,10 +59,7 @@ export class ChangePassStore {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         if (newPw.includes(USER_PASS)) reject(new Error("Whoops!"));
-        else {
-          resolve();
-          console.log("Пароль изменен");
-        }
+        else resolve();
       }, 500);
     });
   }

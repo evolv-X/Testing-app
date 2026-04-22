@@ -181,7 +181,6 @@ type TestCardProps = {
 
 export function TestCard(props: TestCardProps) {
   const { test, lastAttempt, onStart } = props;
-  console.log(lastAttempt);
 
   const scoreText =
     lastAttempt?.status === "graded" ? lastAttempt!.score / 10 : null;
